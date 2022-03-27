@@ -204,7 +204,6 @@ public class Game extends JPanel {
 
         // Todo: 我方获得道具，道具生效
         //去做
-        int ass;
 
     }
 
@@ -275,6 +274,7 @@ public class Game extends JPanel {
 
     private void paintScoreAndLife(Graphics g) {
         int x = 10;
+//        int x=0;
         int y = 25;
         g.setColor(new Color(16711680));
         g.setFont(new Font("SansSerif", Font.BOLD, 22));
