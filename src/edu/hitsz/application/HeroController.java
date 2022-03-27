@@ -33,7 +33,6 @@ public class HeroController {
                 heroAircraft.setLocation(x, y);
             }
         };
-
         game.addMouseListener(mouseAdapter);
         game.addMouseMotionListener(mouseAdapter);
     }

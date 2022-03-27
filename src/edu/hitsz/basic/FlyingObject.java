@@ -74,14 +74,7 @@ public abstract class FlyingObject {
      * 可飞行对象根据速度移动
      * 若飞行对象触碰到横向边界，横向速度反向
      */
-    public void forward() {
-        locationX += speedX;
-        locationY += speedY;
-        if (locationX <= 0 || locationX >= Main.WINDOW_WIDTH) {
-            // 横向超出边界后反向
-            speedX = -speedX;
-        }
-    }
+    public abstract void forward();
 
     /**
      * 碰撞检测，当对方坐标进入我方范围，判定我方击中<br>

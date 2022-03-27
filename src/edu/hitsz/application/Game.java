@@ -3,6 +3,7 @@ package edu.hitsz.application;
 import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.AbstractBullet;
 import edu.hitsz.basic.FlyingObject;
+import edu.hitsz.prop.AbstractProp;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,8 +35,10 @@ public class Game extends JPanel {
     private final List<AbstractAircraft> enemyAircrafts;
     private final List<AbstractBullet> heroBullets;
     private final List<AbstractBullet> enemyBullets;
+    private final List<AbstractProp> abstractProps;
 
     private int enemyMaxNumber = 5;
+    private int eliteEnemyMaxNumber=1; //限制精英敌机的数量
 
     private boolean gameOverFlag = false;
     private int score = 0;
@@ -52,11 +55,12 @@ public class Game extends JPanel {
         heroAircraft = new HeroAircraft(
                 Main.WINDOW_WIDTH / 2,
                 Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight() ,
-                0, 0, 100);
+                0, 0, 10000);
 
         enemyAircrafts = new LinkedList<>();
         heroBullets = new LinkedList<>();
         enemyBullets = new LinkedList<>();
+        abstractProps = new LinkedList<>();
 
         //Scheduled 线程池，用于定时任务调度
         executorService = new ScheduledThreadPoolExecutor(1);
@@ -81,15 +85,23 @@ public class Game extends JPanel {
                 System.out.println(time);
                 // 新敌机产生
                 if (enemyAircrafts.size() < enemyMaxNumber) {
-                    enemyAircrafts.add(new MobEnemy(
-                            (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.MOB_ENEMY_IMAGE.getWidth()))*1,
-                            (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2)*1,
-                            0,
-                            10,
-                            30
-                    ));
+                    //根据分数产生精英机
+                    if(score%100==0&&score!=0&&eliteEnemySize(enemyAircrafts)<eliteEnemyMaxNumber){
+                        enemyAircrafts.add(new EliteEnemy(
+                                (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.ELITE_ENEMY_IMAGE.getWidth()))*1,
+                                (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2)*1
+                        ));
+                    }else{
+                        enemyAircrafts.add(new MobEnemy(
+                                (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.MOB_ENEMY_IMAGE.getWidth()))*1,
+                                (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2)*1,
+                                0,
+                                10,
+                                30
+                        ));
+                    }
                 }
-                // 飞机射出子弹
+                // 飞机射出子弹，包括英雄机射出子弹和敌机射出子弹
                 shootAction();
             }
 
@@ -141,9 +153,29 @@ public class Game extends JPanel {
         }
     }
 
+    // 判断各种类型的敌机的数量
+    private int eliteEnemySize(List<AbstractAircraft> abstractAircrafts){
+        assert abstractAircrafts!=null;
+        int out=0;
+        for(AbstractAircraft aircraft:abstractAircrafts){
+            if(aircraft.notValid()){
+                continue;
+            }
+            if(aircraft instanceof EliteEnemy){
+                out+=1;
+            }
+        }
+        return out;
+    }
+
+
+
+
     private void shootAction() {
-        // TODO 敌机射击
-    //我对敌机射击的实现
+        // 敌机射击
+        for(AbstractAircraft enemy:enemyAircrafts){
+            enemyBullets.addAll(enemy.shoot());
+        }
         // 英雄射击
         heroBullets.addAll(heroAircraft.shoot());
     }
@@ -159,7 +191,11 @@ public class Game extends JPanel {
 
     private void aircraftsMoveAction() {
         for (AbstractAircraft enemyAircraft : enemyAircrafts) {
-            enemyAircraft.forward();
+            if(enemyAircraft instanceof EliteEnemy){
+                enemyAircraft.forward();
+            }else{
+                enemyAircraft.forward();
+            }
         }
     }
 
@@ -171,9 +207,20 @@ public class Game extends JPanel {
      * 3. 英雄获得补给
      */
     private void crashCheckAction() {
-        // TODO 敌机子弹攻击英雄
+        // 敌机子弹攻击英雄
+        for (AbstractBullet bullet : enemyBullets) {
+            if (bullet.notValid()) {
+                continue;
+            }
+            // 判断敌人子弹是否射击到英雄
+            if(heroAircraft.crash(bullet)){
+                bullet.vanish();
+                heroAircraft.decreaseHp(bullet.getPower());
+            }
+        }
 
-        // 英雄子弹攻击敌机
+
+        // 英雄子弹攻击敌机和敌人撞击英雄
         for (AbstractBullet bullet : heroBullets) {
             if (bullet.notValid()) {
                 continue;
@@ -191,7 +238,16 @@ public class Game extends JPanel {
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
                         // TODO 获得分数，产生道具补给
-                        score += 10;
+                        //TODO 根据敌机的不同，产生不同的分数
+                        if(enemyAircraft instanceof EliteEnemy){
+                            score+=50;
+
+                        }else{
+                            score+=10;
+                        }
+                        //TODO 获得道具补给
+
+
                     }
                 }
                 // 英雄机 与 敌机 相撞，均损毁
@@ -203,7 +259,7 @@ public class Game extends JPanel {
         }
 
         // Todo: 我方获得道具，道具生效
-        //去做
+
 
     }
 
@@ -216,9 +272,16 @@ public class Game extends JPanel {
      * 无效的原因可能是撞击或者飞出边界
      */
     private void postProcessAction() {
+
         enemyBullets.removeIf(FlyingObject::notValid);
         heroBullets.removeIf(FlyingObject::notValid);
         enemyAircrafts.removeIf(FlyingObject::notValid);
+
+        //TODO 让道具消失
+
+
+
+
     }
 
 
@@ -244,13 +307,16 @@ public class Game extends JPanel {
             this.backGroundTop = 0;
         }
 
-        // 先绘制子弹，后绘制飞机
+        // 先绘制子弹，再绘制道具，后绘制飞机
+        //TODO 绘制道具
+
         // 这样子弹显示在飞机的下层
         paintImageWithPositionRevised(g, enemyBullets);
         paintImageWithPositionRevised(g, heroBullets);
 
         paintImageWithPositionRevised(g, enemyAircrafts);
 
+        //画图里面传入的参数是从左上角起点开始画的。
         g.drawImage(ImageManager.HERO_IMAGE, heroAircraft.getLocationX() - ImageManager.HERO_IMAGE.getWidth() / 2,
                 heroAircraft.getLocationY() - ImageManager.HERO_IMAGE.getHeight() / 2, null);
 

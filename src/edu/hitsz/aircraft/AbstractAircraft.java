@@ -45,6 +45,28 @@ public abstract class AbstractAircraft extends FlyingObject {
      */
     public abstract List<AbstractBullet> shoot();
 
+    // 重载父类的碰撞方法，使得专门针对子弹的撞击，
+    public boolean crash(AbstractBullet abstractBullet) {   //重载了父类的方法
+        // 缩放因子，用于控制 y轴方向区域范围
+        int factor =2;
+        int fFactor =1;
+
+        int x = abstractBullet.getLocationX();
+        int y = abstractBullet.getLocationY();
+        int fWidth = abstractBullet.getWidth();
+        int fHeight = abstractBullet.getHeight();
+        if(     //如果发生了碰撞
+                x + (fWidth+this.getWidth())/2 > locationX
+                && x - (fWidth+this.getWidth())/2 < locationX
+                && y + ( fHeight/fFactor+this.getHeight()/factor )/2 > locationY
+                && y - ( fHeight/fFactor+this.getHeight()/factor )/2 < locationY
+        ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }
 
 
