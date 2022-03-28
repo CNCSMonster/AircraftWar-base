@@ -1,8 +1,11 @@
 package edu.hitsz.prop;
 
 
+import edu.hitsz.aircraft.AbstractAircraft;
 import edu.hitsz.aircraft.HeroAircraft;
 import edu.hitsz.basic.FlyingObject;
+
+import java.util.List;
 
 public abstract class AbstractProp extends FlyingObject {
 
@@ -28,14 +31,13 @@ public abstract class AbstractProp extends FlyingObject {
         ){  //如果没有发生碰撞
             return false;
         }else{
-            //如果发生碰撞了，实现该类型的无效化，并制造道具效果
+            //如果发生碰撞了，实现该类型的无效化
             this.vanish();
-            propDo();   //实现道具效果
             return true;
         }
     }
 
-    public abstract void propDo();//定义一个抽象方法实现道具的效果
+    public abstract void propDo(HeroAircraft heroAircraft, List<AbstractAircraft> enemy);//定义一个抽象方法实现道具的效果
 
     // 实现抽象父类中的移动方法
     public void forward(){

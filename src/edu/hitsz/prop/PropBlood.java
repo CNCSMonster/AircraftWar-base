@@ -2,6 +2,11 @@
 package edu.hitsz.prop;
 
 
+import edu.hitsz.aircraft.AbstractAircraft;
+import edu.hitsz.aircraft.HeroAircraft;
+
+import java.util.List;
+
 public class PropBlood extends AbstractProp{
 
 
@@ -10,10 +15,19 @@ public class PropBlood extends AbstractProp{
         super(x, y);
     }
 
-    //TODO 实现抽象父类中的抽象方法，产生道具效果
-    public void propDo(){
-        System.out.println("加血");
+    @Override
+    public void propDo(HeroAircraft heroAircraft, List<AbstractAircraft> enemy) {
+        //道具做事
+        heroAircraft.decreaseHp(-100);
     }
+
+
+
+
+
+
+    //重载父类的操作道具方法
+
 
 
 

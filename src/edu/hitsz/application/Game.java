@@ -4,6 +4,9 @@ import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.AbstractBullet;
 import edu.hitsz.basic.FlyingObject;
 import edu.hitsz.prop.AbstractProp;
+import edu.hitsz.prop.PropBlood;
+import edu.hitsz.prop.PropBomb;
+import edu.hitsz.prop.PropBullet;
 
 import javax.swing.*;
 import java.awt.*;
@@ -219,7 +222,6 @@ public class Game extends JPanel {
             }
         }
 
-
         // 英雄子弹攻击敌机和敌人撞击英雄
         for (AbstractBullet bullet : heroBullets) {
             if (bullet.notValid()) {
@@ -237,17 +239,15 @@ public class Game extends JPanel {
                     enemyAircraft.decreaseHp(bullet.getPower());
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
-                        // TODO 获得分数，产生道具补给
-                        //TODO 根据敌机的不同，产生不同的分数
+                        // 获得分数，产生道具补给
+                        // 根据敌机的不同，产生不同的分数
                         if(enemyAircraft instanceof EliteEnemy){
                             score+=50;
-
+                            //获得道具
+                            getProps();
                         }else{
                             score+=10;
                         }
-                        //TODO 获得道具补给
-
-
                     }
                 }
                 // 英雄机 与 敌机 相撞，均损毁
@@ -259,9 +259,35 @@ public class Game extends JPanel {
         }
 
         // Todo: 我方获得道具，道具生效
-
-
+        for(AbstractProp abstractProp:abstractProps){
+            if(heroAircraft.crash(abstractProp)&&abstractProp.crash(heroAircraft)){
+                //如果发生了撞击
+                abstractProp.propDo(heroAircraft,enemyAircrafts);
+            }
+        }
     }
+
+    //获得道具补给
+    private void getProps(){
+        int rand=(int)(Math.random()*15);
+        if(rand<2){
+            abstractProps.add(new PropBlood(
+                    (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.Prop_Blood_IMAGE.getWidth()))*1,
+                    (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2+Main.WINDOW_HEIGHT*0.6)*1
+            ));
+        }else if(rand<5){
+            abstractProps.add(new PropBomb(
+                    (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.Prop_Blood_IMAGE.getWidth()))*1,
+                    (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2+Main.WINDOW_HEIGHT*0.6)*1
+            ));
+        }else if(rand<8){
+            abstractProps.add(new PropBullet(
+                    (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.Prop_Blood_IMAGE.getWidth()))*1,
+                    (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2+Main.WINDOW_HEIGHT*0.6)*1
+            ));
+        }
+    }
+
 
     /**
      * 后处理：
@@ -276,6 +302,7 @@ public class Game extends JPanel {
         enemyBullets.removeIf(FlyingObject::notValid);
         heroBullets.removeIf(FlyingObject::notValid);
         enemyAircrafts.removeIf(FlyingObject::notValid);
+        abstractProps.removeIf(FlyingObject::notValid);
 
         //TODO 让道具消失
 
@@ -309,6 +336,7 @@ public class Game extends JPanel {
 
         // 先绘制子弹，再绘制道具，后绘制飞机
         //TODO 绘制道具
+        paintImageWithPositionRevised(g,abstractProps);
 
         // 这样子弹显示在飞机的下层
         paintImageWithPositionRevised(g, enemyBullets);
