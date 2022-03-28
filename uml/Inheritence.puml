@@ -43,6 +43,8 @@ abstract class AbstractBullet
 	+ getPower():int
 }
 
+
+
 FlyingObject <|-- AbstractAircraft
 FlyingObject <|-- AbstractBullet
 
@@ -76,5 +78,11 @@ class EnemyBullet {
     + EnemyBullet(int locationX, int locationY,
      int speedX, int speedY, int power):void
 }
+
+
+
+
+
+
 
 @enduml
