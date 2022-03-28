@@ -1,7 +1,7 @@
 package edu.hitsz.aircraft;
 
-import edu.hitsz.bullet.AbstractBullet;
-import edu.hitsz.basic.FlyingObject;
+import edu.hitsz.bullet.BasicBullet;
+import edu.hitsz.basic.AbstractFlyingObject;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author hitsz
  */
-public abstract class AbstractAircraft extends FlyingObject {
+public abstract class AbstractAircraft extends AbstractFlyingObject {
     /**
      * 生命值
      */
@@ -43,18 +43,18 @@ public abstract class AbstractAircraft extends FlyingObject {
      *  可射击对象需实现，返回子弹
      *  非可射击对象空实现，返回null
      */
-    public abstract List<AbstractBullet> shoot();
+    public abstract List<BasicBullet> shoot();
 
     // 重载父类的碰撞方法，使得专门针对子弹的撞击，
-    public boolean crash(AbstractBullet abstractBullet) {   //重载了父类的方法
+    public boolean crash(BasicBullet basicBullet) {   //重载了父类的方法
         // 缩放因子，用于控制 y轴方向区域范围
         int factor =2;
         int fFactor =1;
 
-        int x = abstractBullet.getLocationX();
-        int y = abstractBullet.getLocationY();
-        int fWidth = abstractBullet.getWidth();
-        int fHeight = abstractBullet.getHeight();
+        int x = basicBullet.getLocationX();
+        int y = basicBullet.getLocationY();
+        int fWidth = basicBullet.getWidth();
+        int fHeight = basicBullet.getHeight();
         if(     //如果发生了碰撞
                 x + (fWidth+this.getWidth())/2 > locationX
                 && x - (fWidth+this.getWidth())/2 < locationX

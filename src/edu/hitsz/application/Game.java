@@ -1,12 +1,13 @@
 package edu.hitsz.application;
 
 import edu.hitsz.aircraft.*;
-import edu.hitsz.bullet.AbstractBullet;
-import edu.hitsz.basic.FlyingObject;
+import edu.hitsz.bullet.BasicBullet;
+import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.prop.AbstractProp;
 import edu.hitsz.prop.PropBlood;
 import edu.hitsz.prop.PropBomb;
 import edu.hitsz.prop.PropBullet;
+import edu.hitsz.factory.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,9 +37,14 @@ public class Game extends JPanel {
 
     private final HeroAircraft heroAircraft;
     private final List<AbstractAircraft> enemyAircrafts;
-    private final List<AbstractBullet> heroBullets;
-    private final List<AbstractBullet> enemyBullets;
+    private final List<BasicBullet> heroBullets;
+    private final List<BasicBullet> enemyBullets;
     private final List<AbstractProp> abstractProps;
+    private final FlyingObjectFactory mobEnemyFactory;
+    private final FlyingObjectFactory eliteEnemyFactory;
+    private final FlyingObjectFactory propBloodFactory;
+    private final FlyingObjectFactory propBulletFactory;
+    private final FlyingObjectFactory propBombFactory;
 
     private int enemyMaxNumber = 5;
     private int eliteEnemyMaxNumber=1; //限制精英敌机的数量
@@ -65,6 +71,13 @@ public class Game extends JPanel {
         enemyBullets = new LinkedList<>();
         abstractProps = new LinkedList<>();
 
+        //对工厂进行初始化
+        mobEnemyFactory = new MobEnemyFactory();
+        eliteEnemyFactory =new EliteEnemyFactory();
+        propBloodFactory =new PropBloodFactory();
+        propBulletFactory =new PropBulletFactory();
+        propBombFactory =new PropBombFactory();
+
         //Scheduled 线程池，用于定时任务调度
         executorService = new ScheduledThreadPoolExecutor(1);
 
@@ -90,18 +103,9 @@ public class Game extends JPanel {
                 if (enemyAircrafts.size() < enemyMaxNumber) {
                     //根据分数产生精英机
                     if(score%100==0&&score!=0&&eliteEnemySize(enemyAircrafts)<eliteEnemyMaxNumber){
-                        enemyAircrafts.add(new EliteEnemy(
-                                (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.ELITE_ENEMY_IMAGE.getWidth()))*1,
-                                (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2)*1
-                        ));
+                        enemyAircrafts.add((EliteEnemy)eliteEnemyFactory.produceFlyingObjectProduct());
                     }else{
-                        enemyAircrafts.add(new MobEnemy(
-                                (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.MOB_ENEMY_IMAGE.getWidth()))*1,
-                                (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2)*1,
-                                0,
-                                10,
-                                30
-                        ));
+                        enemyAircrafts.add((MobEnemy)mobEnemyFactory.produceFlyingObjectProduct());
                     }
                 }
                 // 飞机射出子弹，包括英雄机射出子弹和敌机射出子弹
@@ -184,10 +188,10 @@ public class Game extends JPanel {
     }
 
     private void bulletsMoveAction() {
-        for (AbstractBullet bullet : heroBullets) {
+        for (BasicBullet bullet : heroBullets) {
             bullet.forward();
         }
-        for (AbstractBullet bullet : enemyBullets) {
+        for (BasicBullet bullet : enemyBullets) {
             bullet.forward();
         }
     }
@@ -211,7 +215,7 @@ public class Game extends JPanel {
      */
     private void crashCheckAction() {
         // 敌机子弹攻击英雄
-        for (AbstractBullet bullet : enemyBullets) {
+        for (BasicBullet bullet : enemyBullets) {
             if (bullet.notValid()) {
                 continue;
             }
@@ -223,7 +227,7 @@ public class Game extends JPanel {
         }
 
         // 英雄子弹攻击敌机和敌人撞击英雄
-        for (AbstractBullet bullet : heroBullets) {
+        for (BasicBullet bullet : heroBullets) {
             if (bullet.notValid()) {
                 continue;
             }
@@ -271,20 +275,11 @@ public class Game extends JPanel {
     private void getProps(){
         int rand=(int)(Math.random()*15);
         if(rand<2){
-            abstractProps.add(new PropBlood(
-                    (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.Prop_Blood_IMAGE.getWidth()))*1,
-                    (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2+Main.WINDOW_HEIGHT*0.6)*1
-            ));
+            abstractProps.add((PropBlood)propBloodFactory.produceFlyingObjectProduct());
         }else if(rand<5){
-            abstractProps.add(new PropBomb(
-                    (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.Prop_Blood_IMAGE.getWidth()))*1,
-                    (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2+Main.WINDOW_HEIGHT*0.6)*1
-            ));
+            abstractProps.add((PropBomb)propBombFactory.produceFlyingObjectProduct());
         }else if(rand<8){
-            abstractProps.add(new PropBullet(
-                    (int) ( Math.random() * (Main.WINDOW_WIDTH - ImageManager.Prop_Blood_IMAGE.getWidth()))*1,
-                    (int) (Math.random() * Main.WINDOW_HEIGHT * 0.2+Main.WINDOW_HEIGHT*0.6)*1
-            ));
+            abstractProps.add((PropBullet)propBulletFactory.produceFlyingObjectProduct());
         }
     }
 
@@ -299,10 +294,10 @@ public class Game extends JPanel {
      */
     private void postProcessAction() {
 
-        enemyBullets.removeIf(FlyingObject::notValid);
-        heroBullets.removeIf(FlyingObject::notValid);
-        enemyAircrafts.removeIf(FlyingObject::notValid);
-        abstractProps.removeIf(FlyingObject::notValid);
+        enemyBullets.removeIf(AbstractFlyingObject::notValid);
+        heroBullets.removeIf(AbstractFlyingObject::notValid);
+        enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
+        abstractProps.removeIf(AbstractFlyingObject::notValid);
 
         //TODO 让道具消失
 
@@ -353,12 +348,12 @@ public class Game extends JPanel {
 
     }
 
-    private void paintImageWithPositionRevised(Graphics g, List<? extends FlyingObject> objects) {
+    private void paintImageWithPositionRevised(Graphics g, List<? extends AbstractFlyingObject> objects) {
         if (objects.size() == 0) {
             return;
         }
 
-        for (FlyingObject object : objects) {
+        for (AbstractFlyingObject object : objects) {
             BufferedImage image = object.getImage();
             assert image != null : objects.getClass().getName() + " has no image! ";
             g.drawImage(image, object.getLocationX() - image.getWidth() / 2,

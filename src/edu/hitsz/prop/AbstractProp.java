@@ -3,21 +3,21 @@ package edu.hitsz.prop;
 
 import edu.hitsz.aircraft.AbstractAircraft;
 import edu.hitsz.aircraft.HeroAircraft;
-import edu.hitsz.basic.FlyingObject;
+import edu.hitsz.basic.AbstractFlyingObject;
 
 import java.util.List;
 
-public abstract class AbstractProp extends FlyingObject {
+public abstract class AbstractProp extends AbstractFlyingObject {
 
 
-    //TODO 重载生成道具类型的方法
+    // 重载生成道具类型的方法
     public AbstractProp(int x,int y){
         super(x,y,0,0);
     }
 
 
 
-    //TODO 重载crash方法，专门用来实现道具与英雄机的碰撞
+    // 重载crash方法，专门用来实现道具与英雄机的碰撞
     public boolean crash(HeroAircraft heroAircraft){
         int x=heroAircraft.getLocationX();
         int y=heroAircraft.getLocationY();

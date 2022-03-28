@@ -1,7 +1,7 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-abstract class FlyingObject
+abstract class AbstractFlyingObject
 {
     # int locationX
     # int locationY
@@ -13,7 +13,7 @@ abstract class FlyingObject
     # boolean isValid
 
     + FlyingObject(int locationX, int locationY, int speedX, int speedY):void
-    + forward():void
+    + {abstract} forward():void
     + crash(FlyingObject flyingObject):boolean
     + setLocation(double locationX, double locationY):void
     + getLocationX():int
@@ -32,25 +32,41 @@ abstract class AbstractAircraft
     + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp):void
     + decreaseHp(int decrease):void
     + getHp():int
+    + {abstract} forward():void
     + {abstract} shoot():List<Bullet>
  }
 
-abstract class AbstractBullet
+abstract class BaseBullet
 {
     - int power
     + Bullet(int locationX, int locationY, int speedX, int speedY, int power):void
     + forward():void
 	+ getPower():int
 }
+abstract class AbstractProp{
+    +forward():void
+    +AbstractProp(int locationX,int locationY):void
+    +{abstract} propDo(HeroAircraft heroAircraft,List<AbstractAircraft> enemy):void
 
-FlyingObject <|-- AbstractAircraft
-FlyingObject <|-- AbstractBullet
+}
+
+
+AbstractFlyingObject <|-- AbstractAircraft
+AbstractFlyingObject <|-- BaseBullet
+AbstractFlyingObject <|-- AbstractProp
 
 AbstractAircraft <|-- HeroAircraft
 AbstractAircraft <|-- MobEnemy
+AbstractAircraft <|-- EliteEnemy
 
-AbstractBullet <|-- HeroBullet
-AbstractBullet <|-- EnemyBullet
+BaseBullet <|-- HeroBullet
+BaseBullet <|-- EnemyBullet
+
+AbstractProp <|-- PropBlood
+AbstractProp <|-- PropBomb
+AbstractProp <|-- PropBullet
+
+
 
 class HeroAircraft {
     - int shootNum
@@ -61,8 +77,22 @@ class HeroAircraft {
     + shoot():List<Bullet>
 }
 
+
+
 class MobEnemy {
+    - int shootNum
+    - int power
+    - int direction
     + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp):void
+    + forward():void
+    + shoot():List<Bullet>
+}
+
+class EliteEnemy{
+    - int shootNum
+    - int power
+    - int direction
+    + EliteEnemy(int locationX, int locationY):void
     + forward():void
     + shoot():List<Bullet>
 }
@@ -76,5 +106,71 @@ class EnemyBullet {
     + EnemyBullet(int locationX, int locationY,
      int speedX, int speedY, int power):void
 }
+
+
+class PropBlood {
+    +forward():void
+    +PropBlood(int locationX,int locationY):void
+    +propDo(HeroAircraft heroAircraft,List<AbstractAircraft> enemy):void
+}
+
+class PropBomb {
+    +forward():void
+    +PropBomb(int locationX,int locationY):void
+    +propDo(HeroAircraft heroAircraft,List<AbstractAircraft> enemy):void
+}
+
+class PropBullet {
+    +forward():void
+    +PropBullet(int locationX,int locationY):void
+    +propDo(HeroAircraft heroAircraft,List<AbstractAircraft> enemy):void
+}
+
+'抽象工厂方法相关工厂接口和产品接口
+interface FlyingObjectFactory {
+    +produceFlyingObjectProduct():FlyingObjectProduct
+}
+interface FlyingObjectProduct {
+
+}
+
+'工厂接口依赖于产品接口
+FlyingObjectProduct <.. FlyingObjectFactory
+
+'实现工厂接口的各个具体工厂
+class MobEnemyFactory {
+    +produceFlyingObjectProduct():FlyingObjectProduct
+}
+class EliteEnemyFactory {
+    +produceFlyingObjectProduct():FlyingObjectProduct
+}
+class PropBloodFactory {
+    +produceFlyingObjectProduct():FlyingObjectProduct
+}
+class PropBulletFactory {
+    +produceFlyingObjectProduct():FlyingObjectProduct
+}
+class PropBombFactory {
+    +produceFlyingObjectProduct():FlyingObjectProduct
+}
+
+'需要让所有道具类飞机类都实现产品接口，所以让他们的共同抽象父类实现产品接口
+FlyingObjectProduct <|.. AbstractFlyingObject
+
+'描述实现工厂接口的具体工厂类型与工厂接口之间的实现关系
+FlyingObjectFactory <|.. MobEnemyFactory
+FlyingObjectFactory <|.. EliteEnemyFactory
+FlyingObjectFactory <|.. PropBloodFactory
+FlyingObjectFactory <|.. PropBulletFactory
+FlyingObjectFactory <|.. PropBombFactory
+
+'描述具体的工厂与他们要生产的具体产品类型之间的依赖关系，因为他们的生产方法依赖用到特定类型的构造方法
+MobEnemy <.. MobEnemyFactory
+EliteEnemy <.. EliteEnemyFactory
+PropBlood <.. PropBloodFactory
+PropBullet <..PropBulletFactory
+PropBomb <.. PropBombFactory
+
+
 
 @enduml
