@@ -4,7 +4,7 @@ import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 import edu.hitsz.prop.PropBomb;
 
-public class PropBombFactory implements FlyingObjectFactory{
+public class PropBombFactory implements AbstractPropFactory{
 
     @Override
     public FlyingObjectProduct produceFlyingObjectProduct() {

@@ -70,7 +70,7 @@ config=StructureConfiguration;
     "showPackageLevels": 2,
     "showDetailedClassStructure": true
   },
-  "rootClass": "hitsz.application.Main",
+  "rootClass": "edu.hitsz.application.Main",
   "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
 }
 diagram meta data end '/
@@ -146,15 +146,82 @@ PropBullet1128288463[
 ];
 } 
 
+subgraph cluster_1404334166 { 
+   	label=factory
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   EliteEnemyFactory355107810[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)EliteEnemyFactory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ produceFlyingObjectProduct(): FlyingObjectProduct</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MobEnemyFactory355107810[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MobEnemyFactory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ produceFlyingObjectProduct(): FlyingObjectProduct</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PropBloodFactory355107810[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PropBloodFactory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ produceFlyingObjectProduct(): FlyingObjectProduct</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PropBombFactory355107810[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PropBombFactory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ produceFlyingObjectProduct(): FlyingObjectProduct</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+PropBulletFactory355107810[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)PropBulletFactory</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ produceFlyingObjectProduct(): FlyingObjectProduct</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+
 subgraph cluster_301692538 { 
    	label=basic
 	labeljust=l
 	fillcolor="#d8d8d8"
 	style=filled
    
-   FlyingObject603771970[
+   AbstractFlyingObject603771970[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)FlyingObject</TD></TR>
+<TR><TD ALIGN="LEFT" >(C)AbstractFlyingObject</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >#   height: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >#   image: BufferedImage [0..1]</TD></TR>
@@ -165,7 +232,7 @@ subgraph cluster_301692538 {
 <TR><TD ALIGN="LEFT" >#   speedY: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >#   width: int [1]</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >+ crash(flyingObject: FlyingObject): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ crash(abstractFlyingObject: AbstractFlyingObject): boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >+ forward()</TD></TR>
 <TR><TD ALIGN="LEFT" >+ notValid(): boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >+ vanish()</TD></TR>
@@ -191,14 +258,19 @@ subgraph cluster_521879908 {
 <TR><TD ALIGN="LEFT" >-   backGroundTop: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   cycleDuration: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   cycleTime: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   eliteEnemyFactory: AbstractAircraftFactory [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   eliteEnemyMaxNumber: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   enemyAircrafts: List&lt;AbstractAircraft&gt; [0..*]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   enemyBullets: List&lt;AbstractBullet&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   enemyBullets: List&lt;BasicBullet&gt; [0..*]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   enemyMaxNumber: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   executorService: ScheduledExecutorService [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   gameOverFlag: boolean [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   heroAircraft: HeroAircraft [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   heroBullets: List&lt;AbstractBullet&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   heroBullets: List&lt;BasicBullet&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mobEnemyFactory: AbstractAircraftFactory [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   propBloodFactory: AbstractPropFactory [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   propBombFactory: AbstractPropFactory [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   propBulletFactory: AbstractPropFactory [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   score: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   time: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   timeInterval: int [1]</TD></TR>
@@ -210,7 +282,7 @@ subgraph cluster_521879908 {
 <TR><TD ALIGN="LEFT" >- eliteEnemySize(abstractAircrafts: List&lt;AbstractAircraft&gt;): int</TD></TR>
 <TR><TD ALIGN="LEFT" >- getProps()</TD></TR>
 <TR><TD ALIGN="LEFT" >+ paint(g: Graphics)</TD></TR>
-<TR><TD ALIGN="LEFT" >- paintImageWithPositionRevised(g: Graphics, objects: List&lt;? extends FlyingObject&gt;)</TD></TR>
+<TR><TD ALIGN="LEFT" >- paintImageWithPositionRevised(g: Graphics, objects: List&lt;? extends AbstractFlyingObject&gt;)</TD></TR>
 <TR><TD ALIGN="LEFT" >- paintScoreAndLife(g: Graphics)</TD></TR>
 <TR><TD ALIGN="LEFT" >- postProcessAction()</TD></TR>
 <TR><TD ALIGN="LEFT" >- shootAction()</TD></TR>
@@ -248,9 +320,9 @@ subgraph cluster_615526070 {
 <TR><TD ALIGN="LEFT" >#   hp: int [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >#   maxHp: int [1]</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >+ crash(abstractBullet: AbstractBullet): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ crash(basicBullet: BasicBullet): boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >+ decreaseHp(decrease: int)</TD></TR>
-<TR><TD ALIGN="LEFT" >+ shoot(): List&lt;AbstractBullet&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ shoot(): List&lt;BasicBullet&gt;</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -267,7 +339,7 @@ EliteEnemy676347522[
 <TR><TD ALIGN="LEFT" >-   shootNum: int [1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ forward()</TD></TR>
-<TR><TD ALIGN="LEFT" >+ shoot(): List&lt;AbstractBullet&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ shoot(): List&lt;BasicBullet&gt;</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -284,7 +356,7 @@ HeroAircraft676347522[
 <TR><TD ALIGN="LEFT" >-   shootNum: int [1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ forward()</TD></TR>
-<TR><TD ALIGN="LEFT" >+ shoot(): List&lt;AbstractBullet&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ shoot(): List&lt;BasicBullet&gt;</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -301,7 +373,7 @@ MobEnemy676347522[
 <TR><TD ALIGN="LEFT" >-   shootNum: int [1]</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >+ forward()</TD></TR>
-<TR><TD ALIGN="LEFT" >+ shoot(): List&lt;AbstractBullet&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ shoot(): List&lt;BasicBullet&gt;</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
@@ -316,9 +388,9 @@ subgraph cluster_780799030 {
 	fillcolor="#d8d8d8"
 	style=filled
    
-   AbstractBullet1555326830[
+   BasicBullet1555326830[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
-<TR><TD ALIGN="LEFT" >(C)AbstractBullet</TD></TR>
+<TR><TD ALIGN="LEFT" >(C)BasicBullet</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >-   power: int [1]</TD></TR>
 <HR/>
@@ -356,30 +428,35 @@ HeroBullet1555326830[
 AbstractAircraft676347522 -> EliteEnemy676347522[arrowhead=none, arrowtail=empty, dir=both];
 AbstractAircraft676347522 -> HeroAircraft676347522[arrowhead=none, arrowtail=empty, dir=both];
 AbstractAircraft676347522 -> MobEnemy676347522[arrowhead=none, arrowtail=empty, dir=both];
-AbstractBullet1555326830 -> EnemyBullet1555326830[arrowhead=none, arrowtail=empty, dir=both];
-AbstractBullet1555326830 -> HeroBullet1555326830[arrowhead=none, arrowtail=empty, dir=both];
+AbstractFlyingObject603771970 -> AbstractAircraft676347522[arrowhead=none, arrowtail=empty, dir=both];
+AbstractFlyingObject603771970 -> AbstractProp1128288463[arrowhead=none, arrowtail=empty, dir=both];
+AbstractFlyingObject603771970 -> BasicBullet1555326830[arrowhead=none, arrowtail=empty, dir=both];
+AbstractFlyingObject603771970 -> EliteEnemy676347522[label="forward() -> forward()"];
+AbstractFlyingObject603771970 -> HeroAircraft676347522[label="forward() -> forward()"];
+AbstractFlyingObject603771970 -> MobEnemy676347522[label="forward() -> forward()"];
 AbstractProp1128288463 -> PropBlood1128288463[arrowhead=none, arrowtail=empty, dir=both];
 AbstractProp1128288463 -> PropBomb1128288463[arrowhead=none, arrowtail=empty, dir=both];
 AbstractProp1128288463 -> PropBullet1128288463[arrowhead=none, arrowtail=empty, dir=both];
-EliteEnemy676347522 -> FlyingObject603771970[label="forward() -> vanish()"];
-FlyingObject603771970 -> AbstractAircraft676347522[arrowhead=none, arrowtail=empty, dir=both];
-FlyingObject603771970 -> AbstractBullet1555326830[arrowhead=none, arrowtail=empty, dir=both];
-FlyingObject603771970 -> AbstractProp1128288463[arrowhead=none, arrowtail=empty, dir=both];
-FlyingObject603771970 -> EliteEnemy676347522[label="forward() -> forward()"];
-FlyingObject603771970 -> HeroAircraft676347522[label="forward() -> forward()"];
-FlyingObject603771970 -> MobEnemy676347522[label="forward() -> forward()"];
+BasicBullet1555326830 -> EnemyBullet1555326830[arrowhead=none, arrowtail=empty, dir=both];
+BasicBullet1555326830 -> HeroBullet1555326830[arrowhead=none, arrowtail=empty, dir=both];
+EliteEnemy676347522 -> AbstractFlyingObject603771970[label="forward() -> vanish()"];
 Game1517640092 -> AbstractAircraft676347522[label="enemyAircrafts
-[0..*]"];
-Game1517640092 -> AbstractBullet1555326830[label="enemyBullets
-[0..*]"];
-Game1517640092 -> AbstractBullet1555326830[label="heroBullets
 [0..*]"];
 Game1517640092 -> AbstractProp1128288463[label="abstractProps
 [0..*]"];
+Game1517640092 -> BasicBullet1555326830[label="enemyBullets
+[0..*]"];
+Game1517640092 -> BasicBullet1555326830[label="heroBullets
+[0..*]"];
+Game1517640092 -> EliteEnemyFactory355107810[arrowhead=none];
 Game1517640092 -> HeroAircraft676347522[label="heroAircraft
 [0..1]"];
+Game1517640092 -> MobEnemyFactory355107810[arrowhead=none];
+Game1517640092 -> PropBloodFactory355107810[arrowhead=none];
+Game1517640092 -> PropBombFactory355107810[arrowhead=none];
+Game1517640092 -> PropBulletFactory355107810[arrowhead=none];
 Main1517640092 -> Game1517640092[label="main() -> action()"];
-MobEnemy676347522 -> FlyingObject603771970[label="forward() -> vanish()"];
+MobEnemy676347522 -> AbstractFlyingObject603771970[label="forward() -> vanish()"];
 PropBlood1128288463 -> AbstractAircraft676347522[label="propDo() -> decreaseHp()"];
     
 }

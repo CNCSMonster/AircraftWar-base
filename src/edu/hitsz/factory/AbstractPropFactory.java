@@ -1,5 +1,6 @@
 package edu.hitsz.factory;
 
-public interface FlyingObjectFactory {
+public interface AbstractPropFactory {
     public abstract FlyingObjectProduct produceFlyingObjectProduct();
+
 }

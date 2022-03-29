@@ -72,7 +72,9 @@ class HeroAircraft {
     - int shootNum
     - int power
     - int direction
-    + HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp):void
+    - HeroAircraft heroAircraft  '唯一的英雄机类的该类的静态对象
+    - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp):void   '构造方法私有化，使得外界不能够通过构造方法生成更多变量
+    + getHeroAircraft():HeroAircraft   '唯一提供给外界的用来访问类唯一静态英雄机变量的方法
     + forward():void
     + shoot():List<Bullet>
 }
@@ -127,15 +129,25 @@ class PropBullet {
 }
 
 '抽象工厂方法相关工厂接口和产品接口
-interface FlyingObjectFactory {
+
+
+interface AbstractPropFactory {
     +produceFlyingObjectProduct():FlyingObjectProduct
 }
+
+interface AbstractAircraftFactory {
+    +produceFlyingObjectProduct():FlyingObjectProduct
+}
+
 interface FlyingObjectProduct {
 
 }
 
+
+
 '工厂接口依赖于产品接口
-FlyingObjectProduct <.. FlyingObjectFactory
+FlyingObjectProduct <.. AbstractPropFactory
+FlyingObjectProduct <.. AbstractAircraftFactory
 
 '实现工厂接口的各个具体工厂
 class MobEnemyFactory {
@@ -158,11 +170,11 @@ class PropBombFactory {
 FlyingObjectProduct <|.. AbstractFlyingObject
 
 '描述实现工厂接口的具体工厂类型与工厂接口之间的实现关系
-FlyingObjectFactory <|.. MobEnemyFactory
-FlyingObjectFactory <|.. EliteEnemyFactory
-FlyingObjectFactory <|.. PropBloodFactory
-FlyingObjectFactory <|.. PropBulletFactory
-FlyingObjectFactory <|.. PropBombFactory
+AbstractAircraftFactory <|.. MobEnemyFactory
+AbstractAircraftFactory <|.. EliteEnemyFactory
+AbstractPropFactory <|.. PropBloodFactory
+AbstractPropFactory <|.. PropBulletFactory
+AbstractPropFactory <|.. PropBombFactory
 
 '描述具体的工厂与他们要生产的具体产品类型之间的依赖关系，因为他们的生产方法依赖用到特定类型的构造方法
 MobEnemy <.. MobEnemyFactory

@@ -4,7 +4,7 @@ import edu.hitsz.aircraft.EliteEnemy;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 
-public class EliteEnemyFactory implements FlyingObjectFactory{
+public class EliteEnemyFactory implements AbstractAircraftFactory{
 
     @Override
     public FlyingObjectProduct produceFlyingObjectProduct() {

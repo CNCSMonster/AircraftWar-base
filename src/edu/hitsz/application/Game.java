@@ -40,11 +40,11 @@ public class Game extends JPanel {
     private final List<BasicBullet> heroBullets;
     private final List<BasicBullet> enemyBullets;
     private final List<AbstractProp> abstractProps;
-    private final FlyingObjectFactory mobEnemyFactory;
-    private final FlyingObjectFactory eliteEnemyFactory;
-    private final FlyingObjectFactory propBloodFactory;
-    private final FlyingObjectFactory propBulletFactory;
-    private final FlyingObjectFactory propBombFactory;
+    private final AbstractAircraftFactory mobEnemyFactory;
+    private final AbstractAircraftFactory eliteEnemyFactory;
+    private final AbstractPropFactory propBloodFactory;
+    private final AbstractPropFactory propBulletFactory;
+    private final AbstractPropFactory propBombFactory;
 
     private int enemyMaxNumber = 5;
     private int eliteEnemyMaxNumber=1; //限制精英敌机的数量
@@ -61,10 +61,7 @@ public class Game extends JPanel {
 
 
     public Game() {
-        heroAircraft = new HeroAircraft(
-                Main.WINDOW_WIDTH / 2,
-                Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight() ,
-                0, 0, 10000);
+        heroAircraft =HeroAircraft.getHeroAircraft();
 
         enemyAircrafts = new LinkedList<>();
         heroBullets = new LinkedList<>();
