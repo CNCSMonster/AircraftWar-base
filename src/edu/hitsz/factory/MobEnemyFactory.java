@@ -4,7 +4,7 @@ import edu.hitsz.aircraft.MobEnemy;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 
-public class MobEnemyFactory implements FlyingObjectFactory{
+public class MobEnemyFactory implements AbstractAircraftFactory{
     @Override
     public FlyingObjectProduct produceFlyingObjectProduct() {
         return new MobEnemy(
