@@ -40,6 +40,7 @@ public abstract class AbstractProp extends AbstractFlyingObject {
     public abstract void propDo(HeroAircraft heroAircraft, List<AbstractAircraft> enemy);//定义一个抽象方法实现道具的效果
 
     // 实现抽象父类中的移动方法
+    @Override
     public void forward(){
         //作为道具，不需要移动
     }

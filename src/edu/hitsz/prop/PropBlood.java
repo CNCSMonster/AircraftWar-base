@@ -7,6 +7,10 @@ import edu.hitsz.aircraft.HeroAircraft;
 
 import java.util.List;
 
+
+/**
+ * @author
+ */
 public class PropBlood extends AbstractProp{
 
 

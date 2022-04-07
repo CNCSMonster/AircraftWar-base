@@ -21,7 +21,8 @@ public class BasicBullet extends AbstractFlyingObject {
     @Override
     public void forward() {
 
-        this.locationY+=speedY; //speedY为正时向下，为负时向上
+        //speedY为正时向下，为负时向上
+        this.locationY+=speedY;
         // 判定 x 轴出界
         if (locationX <= 0 || locationX >= Main.WINDOW_WIDTH) {
             vanish();
