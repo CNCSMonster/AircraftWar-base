@@ -8,10 +8,12 @@ import edu.hitsz.prop.PropBlood;
 import edu.hitsz.prop.PropBomb;
 import edu.hitsz.prop.PropBullet;
 import edu.hitsz.factory.*;
+import edu.hitsz.strategy.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.security.PrivateKey;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
@@ -48,6 +50,14 @@ public class Game extends JPanel {
     private final AbstractPropFactory propBulletFactory;
     private final AbstractPropFactory propBombFactory;
 
+    //记录使用的策略
+    private final Context heroContext;
+    private final Context eliteContext;
+    private final Context mobContext;
+    private final Context bossContext;
+
+
+
     private int enemyMaxNumber = 5;
     private int eliteEnemyMaxNumber=1; //限制精英敌机的数量
     private int bossEnemyMaxNumber=1;   //限制boss机的数量
@@ -81,9 +91,10 @@ public class Game extends JPanel {
         //使用策略方法获得shoot结果
         //设定策略如下：
         //定义策略使用者
-
-
-
+        heroContext=new Context(new HeroStrategy());
+        mobContext=new Context(new MobStrategy());
+        eliteContext =new Context(new EliteStrategy());
+        bossContext =new Context(new BossStrategy());
 
 
         //对工厂进行初始化
@@ -219,10 +230,18 @@ public class Game extends JPanel {
     private void shootAction() {
         // 敌机射击
         for(AbstractAircraft enemy:enemyAircrafts){
-            enemyBullets.addAll(enemy.shoot());
+            List<BasicBullet> term;
+            if(enemy instanceof BossEnemy){
+                term=bossContext.useShootStrategy(enemy);
+            }else if(enemy instanceof EliteEnemy){
+                term=eliteContext.useShootStrategy(enemy);
+            }else{
+                term=mobContext.useShootStrategy(enemy);
+            }
+            enemyBullets.addAll(term);
         }
         // 英雄射击
-        heroBullets.addAll(heroAircraft.shoot());
+        heroBullets.addAll(heroContext.useShootStrategy(heroAircraft));
     }
 
     private void bulletsMoveAction() {

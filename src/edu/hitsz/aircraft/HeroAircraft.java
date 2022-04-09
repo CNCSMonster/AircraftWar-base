@@ -15,7 +15,9 @@ import java.util.List;
 public class HeroAircraft extends AbstractAircraft {
 
     /** 攻击方式 */
-    private int ifon=0;         //用来记录当期子弹发射方式
+
+    //使用ifon记录子弹射击的模式，0为一般模式，1为增加数量，2为散射，3为增加射击威力。
+    private int ifon=2;
 
     private int shootNum = 1;     //子弹一次发射数量
     private int power = 30;       //子弹伤害

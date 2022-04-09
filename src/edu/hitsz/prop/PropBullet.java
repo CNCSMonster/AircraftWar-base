@@ -12,7 +12,9 @@ public class PropBullet extends AbstractProp{
 
     @Override
     public void propDo(HeroAircraft heroAircraft, List<AbstractAircraft> enemy) {
-        System.out.println("FireSupply active!");
+        int a;
+        a=(int)(Math.random()*3)+1;
+        heroAircraft.setIfon(a);
     }
 
 

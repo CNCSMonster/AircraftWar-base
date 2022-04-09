@@ -23,6 +23,7 @@ public class BasicBullet extends AbstractFlyingObject {
 
         //speedY为正时向下，为负时向上
         this.locationY+=speedY;
+        this.locationX+=speedX;
         // 判定 x 轴出界
         if (locationX <= 0 || locationX >= Main.WINDOW_WIDTH) {
             vanish();

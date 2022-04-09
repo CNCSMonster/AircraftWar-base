@@ -25,8 +25,4 @@ public class Context {
         return this.strategy.strategyShoot(abstractAircraft);
     }
 
-    public AbstractAircraft useGetAircraftStrategy(){
-        return this.strategy.strategyGetAircraft();
-    }
-
 }
