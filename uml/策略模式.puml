@@ -1,5 +1,37 @@
 @startuml
 
+abstract class AbstractAircraft{
+
+    '射击需要的参数以及射击策略
+    # int power
+    # int numOfBullet
+    # Strategy shootStrategy
+
+    +getPower():int
+    +setPower():void
+    +getNumOfBullet():int
+    +setNumOfBullet():void
+    +setStrategy():void
+    +shoot():List<BasicBullet>
+}
+
+interface Strategy {
+    +strategyShoot(AbstractAircraft abstractAircraft):List<BasicBullet>
+}
+
+Strategy <.. AbstractAircraft
+
+class ScatterShootStrategy {
+    +strategyShoot(AbstractAircraft abstractAircraft):List<BasicBullet>
+}
+
+class StraightShootStrategy {
+    +strategyShoot(AbstractAircraft abstractAircraft):List<BasicBullet>
+}
+
+Strategy <|.. ScatterShootStrategy
+Strategy <|.. StraightShootStrategy
+
 
 
 

@@ -22,7 +22,7 @@ public class PropBlood extends AbstractProp{
     @Override
     public void propDo(HeroAircraft heroAircraft, List<AbstractAircraft> enemy) {
         //道具做事
-        heroAircraft.decreaseHp(-100);
+        heroAircraft.decreaseHp(-5000);
     }
 
 

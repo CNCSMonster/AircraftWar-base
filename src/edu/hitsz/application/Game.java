@@ -50,11 +50,6 @@ public class Game extends JPanel {
     private final AbstractPropFactory propBulletFactory;
     private final AbstractPropFactory propBombFactory;
 
-    //记录使用的策略
-    private final Context heroContext;
-    private final Context eliteContext;
-    private final Context mobContext;
-    private final Context bossContext;
 
 
 
@@ -88,13 +83,7 @@ public class Game extends JPanel {
         enemyBullets = new LinkedList<>();
         abstractProps = new LinkedList<>();
 
-        //使用策略方法获得shoot结果
-        //设定策略如下：
-        //定义策略使用者
-        heroContext=new Context(new HeroStrategy());
-        mobContext=new Context(new MobStrategy());
-        eliteContext =new Context(new EliteStrategy());
-        bossContext =new Context(new BossStrategy());
+      //策略模式使用抽象飞机作为上下文
 
 
         //对工厂进行初始化
@@ -136,13 +125,12 @@ public class Game extends JPanel {
                     enemyAircrafts.add((BossEnemy)bossEnemyFactory.produceFlyingObjectProduct());
                     bTimes++;
                 }
+                if(score%100==0&&score!=0&&eliteEnemySize(enemyAircrafts)<eliteEnemyMaxNumber){
+                    enemyAircrafts.add((EliteEnemy)eliteEnemyFactory.produceFlyingObjectProduct());
+                }
                 if (enemyAircrafts.size() < enemyMaxNumber) {
                     //根据分数产生精英机
-                    if(score%100==0&&score!=0&&eliteEnemySize(enemyAircrafts)<eliteEnemyMaxNumber){
-                        enemyAircrafts.add((EliteEnemy)eliteEnemyFactory.produceFlyingObjectProduct());
-                    }else{
                         enemyAircrafts.add((MobEnemy)mobEnemyFactory.produceFlyingObjectProduct());
-                    }
                 }
                 // 飞机射出子弹，包括英雄机射出子弹和敌机射出子弹
                 shootAction();
@@ -230,18 +218,10 @@ public class Game extends JPanel {
     private void shootAction() {
         // 敌机射击
         for(AbstractAircraft enemy:enemyAircrafts){
-            List<BasicBullet> term;
-            if(enemy instanceof BossEnemy){
-                term=bossContext.useShootStrategy(enemy);
-            }else if(enemy instanceof EliteEnemy){
-                term=eliteContext.useShootStrategy(enemy);
-            }else{
-                term=mobContext.useShootStrategy(enemy);
-            }
-            enemyBullets.addAll(term);
+            enemyBullets.addAll(enemy.shoot());
         }
         // 英雄射击
-        heroBullets.addAll(heroContext.useShootStrategy(heroAircraft));
+        heroBullets.addAll(heroAircraft.shoot());
     }
 
     private void bulletsMoveAction() {

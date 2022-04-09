@@ -19,8 +19,28 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
     protected int maxHp;
     protected int hp;
 
-    //引入具体策略
+    //射击参数
+    protected int power;
+    protected int numOfBullet;
+
+    public int getPower() {
+        return power;
+    }
+    public void setPower(int power) {
+        this.power = power;
+    }
+    public int getNumOfBullet() {
+        return numOfBullet;
+    }
+    public void setNumOfBullet(int numOfBullet) {
+        this.numOfBullet = numOfBullet;
+    }
+
+    //射击策略
     private Strategy shootStrategy;
+    public void setShootStrategy(Strategy shootStrategy) {
+        this.shootStrategy = shootStrategy;
+    }
 
     public AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY);
@@ -28,11 +48,20 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
         this.maxHp = hp;
     }
 
+    public AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp,Strategy strategy){
+        super(locationX, locationY, speedX, speedY);
+        this.hp = hp;
+        this.maxHp = hp;
+        this.shootStrategy=strategy;
+    }
+
     public void decreaseHp(int decrease){
         hp -= decrease;
         if(hp <= 0){
             hp=0;
             vanish();
+        }else if(hp>maxHp){
+            hp=maxHp;
         }
     }
 
@@ -47,7 +76,9 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
      *  可射击对象需实现，返回子弹
      *  非可射击对象空实现，返回null
      */
-    public abstract List<BasicBullet> shoot();
+    public List<BasicBullet> shoot(){
+        return shootStrategy.strategyShoot(this);
+    }
 
     // 重载父类的碰撞方法，使得专门针对子弹的撞击，
     public boolean crash(BasicBullet basicBullet) {   //重载了父类的方法

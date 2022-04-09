@@ -3,6 +3,7 @@ package edu.hitsz.prop;
 
 import edu.hitsz.aircraft.AbstractAircraft;
 import edu.hitsz.aircraft.HeroAircraft;
+import edu.hitsz.application.Main;
 import edu.hitsz.basic.AbstractFlyingObject;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public abstract class AbstractProp extends AbstractFlyingObject {
     // 重载生成道具类型的方法
     public AbstractProp(int x,int y){
         super(x,y,0,0);
+        this.speedY=2;
     }
 
 
@@ -42,7 +44,11 @@ public abstract class AbstractProp extends AbstractFlyingObject {
     // 实现抽象父类中的移动方法
     @Override
     public void forward(){
-        //作为道具，不需要移动
+        //作为道具，需要缓慢移动
+        this.locationY+=this.speedY;
+        if(this.locationY> Main.WINDOW_HEIGHT){
+            this.vanish();
+        }
     }
 
 }

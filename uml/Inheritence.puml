@@ -100,14 +100,14 @@ class EliteEnemy{
     + shoot():List<Bullet>
 }
 
-'class BossEnemy{
-'    - int shootNum
-'    - int power
-'    - int direction
-'    + EliteEnemy(int locationX, int locationY):void
-'    + forward():void
-'    + shoot():List<Bullet>
-'}
+class BossEnemy{
+    - int shootNum
+    - int power
+    - int direction
+    + EliteEnemy(int locationX, int locationY):void
+    + forward():void
+    + shoot():List<Bullet>
+}
 
 class HeroBullet {
     + HeroBullet(int locationX, int locationY,
@@ -166,6 +166,10 @@ class MobEnemyFactory {
 class EliteEnemyFactory {
     +produceFlyingObjectProduct():FlyingObjectProduct
 }
+class BossEnemyFactory {
+    +produceFlyingObjectProduct():FlyingObjectProduct
+}
+
 class PropBloodFactory {
     +produceFlyingObjectProduct():FlyingObjectProduct
 }
@@ -182,6 +186,7 @@ FlyingObjectProduct <|.. AbstractFlyingObject
 '描述实现工厂接口的具体工厂类型与工厂接口之间的实现关系
 AbstractAircraftFactory <|.. MobEnemyFactory
 AbstractAircraftFactory <|.. EliteEnemyFactory
+AbstractAircraftFactory <|.. BossEnemyFactory
 AbstractPropFactory <|.. PropBloodFactory
 AbstractPropFactory <|.. PropBulletFactory
 AbstractPropFactory <|.. PropBombFactory
@@ -189,6 +194,7 @@ AbstractPropFactory <|.. PropBombFactory
 '描述具体的工厂与他们要生产的具体产品类型之间的依赖关系，因为他们的生产方法依赖用到特定类型的构造方法
 MobEnemy <.. MobEnemyFactory
 EliteEnemy <.. EliteEnemyFactory
+BossEnemy <.. BossEnemyFactory
 PropBlood <.. PropBloodFactory
 PropBullet <..PropBulletFactory
 PropBomb <.. PropBombFactory
