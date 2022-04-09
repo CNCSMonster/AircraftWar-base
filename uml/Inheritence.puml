@@ -58,6 +58,7 @@ AbstractFlyingObject <|-- AbstractProp
 AbstractAircraft <|-- HeroAircraft
 AbstractAircraft <|-- MobEnemy
 AbstractAircraft <|-- EliteEnemy
+'AbstractAircraft <|-- BossEnemy
 
 BaseBullet <|-- HeroBullet
 BaseBullet <|-- EnemyBullet
@@ -73,7 +74,7 @@ class HeroAircraft {
     - int power
     - int direction
     - HeroAircraft heroAircraft  '唯一的英雄机类的该类的静态对象
-    - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp):void   '构造方法私有化，使得外界不能够通过构造方法生成更多变量
+    - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp):HeroAircraft   '构造方法私有化，使得外界不能够通过构造方法生成更多变量
     + getHeroAircraft():HeroAircraft   '唯一提供给外界的用来访问类唯一静态英雄机变量的方法
     + forward():void
     + shoot():List<Bullet>
@@ -85,7 +86,7 @@ class MobEnemy {
     - int shootNum
     - int power
     - int direction
-    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp):void
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp):MobEnemy
     + forward():void
     + shoot():List<Bullet>
 }
@@ -94,10 +95,19 @@ class EliteEnemy{
     - int shootNum
     - int power
     - int direction
-    + EliteEnemy(int locationX, int locationY):void
+    + EliteEnemy(int locationX, int locationY):EliteEnemy
     + forward():void
     + shoot():List<Bullet>
 }
+
+'class BossEnemy{
+'    - int shootNum
+'    - int power
+'    - int direction
+'    + EliteEnemy(int locationX, int locationY):void
+'    + forward():void
+'    + shoot():List<Bullet>
+'}
 
 class HeroBullet {
     + HeroBullet(int locationX, int locationY,

@@ -213,13 +213,13 @@ PropBulletFactory355107810[
 ];
 } 
 
-subgraph cluster_301692538 { 
-   	label=basic
+subgraph cluster_521879908 { 
+   	label=application
 	labeljust=l
 	fillcolor="#d8d8d8"
 	style=filled
    
-   AbstractFlyingObject603771970[
+   AbstractFlyingObject511118372[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)AbstractFlyingObject</TD></TR>
 <HR/>
@@ -242,15 +242,8 @@ subgraph cluster_301692538 {
 	shape=plaintext
 	fillcolor="#FFFFFF"
 ];
-} 
 
-subgraph cluster_521879908 { 
-   	label=application
-	labeljust=l
-	fillcolor="#d8d8d8"
-	style=filled
-   
-   Game1517640092[
+Game1517640092[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)Game</TD></TR>
 <HR/>
@@ -322,6 +315,23 @@ subgraph cluster_615526070 {
 <HR/>
 <TR><TD ALIGN="LEFT" >+ crash(basicBullet: BasicBullet): boolean</TD></TR>
 <TR><TD ALIGN="LEFT" >+ decreaseHp(decrease: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ shoot(): List&lt;BasicBullet&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+BossEnemy676347522[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BossEnemy</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   direction: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   power: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   shootNum: int [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ forward()</TD></TR>
 <TR><TD ALIGN="LEFT" >+ shoot(): List&lt;BasicBullet&gt;</TD></TR>
 </TABLE>>
 	style=filled
@@ -425,21 +435,24 @@ HeroBullet1555326830[
 } 
 
 'edges    
+AbstractAircraft676347522 -> BossEnemy676347522[arrowhead=none, arrowtail=empty, dir=both];
 AbstractAircraft676347522 -> EliteEnemy676347522[arrowhead=none, arrowtail=empty, dir=both];
 AbstractAircraft676347522 -> HeroAircraft676347522[arrowhead=none, arrowtail=empty, dir=both];
 AbstractAircraft676347522 -> MobEnemy676347522[arrowhead=none, arrowtail=empty, dir=both];
-AbstractFlyingObject603771970 -> AbstractAircraft676347522[arrowhead=none, arrowtail=empty, dir=both];
-AbstractFlyingObject603771970 -> AbstractProp1128288463[arrowhead=none, arrowtail=empty, dir=both];
-AbstractFlyingObject603771970 -> BasicBullet1555326830[arrowhead=none, arrowtail=empty, dir=both];
-AbstractFlyingObject603771970 -> EliteEnemy676347522[label="forward() -> forward()"];
-AbstractFlyingObject603771970 -> HeroAircraft676347522[label="forward() -> forward()"];
-AbstractFlyingObject603771970 -> MobEnemy676347522[label="forward() -> forward()"];
+AbstractFlyingObject511118372 -> AbstractAircraft676347522[arrowhead=none, arrowtail=empty, dir=both];
+AbstractFlyingObject511118372 -> AbstractProp1128288463[arrowhead=none, arrowtail=empty, dir=both];
+AbstractFlyingObject511118372 -> BasicBullet1555326830[arrowhead=none, arrowtail=empty, dir=both];
+AbstractFlyingObject511118372 -> BossEnemy676347522[label="forward() -> forward()"];
+AbstractFlyingObject511118372 -> EliteEnemy676347522[label="forward() -> forward()"];
+AbstractFlyingObject511118372 -> HeroAircraft676347522[label="forward() -> forward()"];
+AbstractFlyingObject511118372 -> MobEnemy676347522[label="forward() -> forward()"];
 AbstractProp1128288463 -> PropBlood1128288463[arrowhead=none, arrowtail=empty, dir=both];
 AbstractProp1128288463 -> PropBomb1128288463[arrowhead=none, arrowtail=empty, dir=both];
 AbstractProp1128288463 -> PropBullet1128288463[arrowhead=none, arrowtail=empty, dir=both];
 BasicBullet1555326830 -> EnemyBullet1555326830[arrowhead=none, arrowtail=empty, dir=both];
 BasicBullet1555326830 -> HeroBullet1555326830[arrowhead=none, arrowtail=empty, dir=both];
-EliteEnemy676347522 -> AbstractFlyingObject603771970[label="forward() -> vanish()"];
+BossEnemy676347522 -> AbstractFlyingObject511118372[label="forward() -> vanish()"];
+EliteEnemy676347522 -> AbstractFlyingObject511118372[label="forward() -> vanish()"];
 Game1517640092 -> AbstractAircraft676347522[label="enemyAircrafts
 [0..*]"];
 Game1517640092 -> AbstractProp1128288463[label="abstractProps
@@ -456,7 +469,7 @@ Game1517640092 -> PropBloodFactory355107810[arrowhead=none];
 Game1517640092 -> PropBombFactory355107810[arrowhead=none];
 Game1517640092 -> PropBulletFactory355107810[arrowhead=none];
 Main1517640092 -> Game1517640092[label="main() -> action()"];
-MobEnemy676347522 -> AbstractFlyingObject603771970[label="forward() -> vanish()"];
+MobEnemy676347522 -> AbstractFlyingObject511118372[label="forward() -> vanish()"];
 PropBlood1128288463 -> AbstractAircraft676347522[label="propDo() -> decreaseHp()"];
     
 }

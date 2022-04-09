@@ -1,6 +1,7 @@
 package edu.hitsz.application;
 
 
+import edu.hitsz.aircraft.BossEnemy;
 import edu.hitsz.aircraft.EliteEnemy;
 import edu.hitsz.aircraft.HeroAircraft;
 import edu.hitsz.aircraft.MobEnemy;
@@ -43,8 +44,10 @@ public class ImageManager {
 
 
 
+
     //新图片
     public static BufferedImage ELITE_ENEMY_IMAGE;
+    public static BufferedImage BOSS_ENEMY_IMAGE;
 
     static {
         try {
@@ -57,6 +60,8 @@ public class ImageManager {
             ENEMY_BULLET_IMAGE = ImageIO.read(new FileInputStream("src/images/bullet_enemy.png"));
             //增加精英机图片
             ELITE_ENEMY_IMAGE=ImageIO.read(new FileInputStream("src/images/elite.png"));
+            //增加Boss机图片
+            BOSS_ENEMY_IMAGE=ImageIO.read(new FileInputStream("src/images/boss.png"));
             //初始化道具照片
             Prop_Blood_IMAGE=ImageIO.read(new FileInputStream("src/images/prop_blood.png"));
             Prop_Bullet_IMAGE=ImageIO.read(new FileInputStream("src/images/prop_bullet.png"));
@@ -73,7 +78,7 @@ public class ImageManager {
             CLASSNAME_IMAGE_MAP.put(PropBlood.class.getName(), Prop_Blood_IMAGE);
             CLASSNAME_IMAGE_MAP.put(PropBomb.class.getName(), Prop_Bomb_IMAGE);
             CLASSNAME_IMAGE_MAP.put(PropBullet.class.getName(), Prop_Bullet_IMAGE);
-
+            CLASSNAME_IMAGE_MAP.put(BossEnemy.class.getName(),BOSS_ENEMY_IMAGE);
 
         } catch (IOException e) {
             e.printStackTrace();

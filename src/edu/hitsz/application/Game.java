@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 游戏主面板，游戏启动
@@ -42,12 +43,16 @@ public class Game extends JPanel {
     private final List<AbstractProp> abstractProps;
     private final AbstractAircraftFactory mobEnemyFactory;
     private final AbstractAircraftFactory eliteEnemyFactory;
+    private final AbstractAircraftFactory bossEnemyFactory;
     private final AbstractPropFactory propBloodFactory;
     private final AbstractPropFactory propBulletFactory;
     private final AbstractPropFactory propBombFactory;
 
     private int enemyMaxNumber = 5;
     private int eliteEnemyMaxNumber=1; //限制精英敌机的数量
+    private int bossEnemyMaxNumber=1;   //限制boss机的数量
+    private int bTimes=0;  //记录boss机出现的次数
+    private int bEdge=50;   //记录boss机出现的分数阈值
 
     private boolean gameOverFlag = false;
     private int score = 0;
@@ -63,17 +68,35 @@ public class Game extends JPanel {
     public Game() {
         heroAircraft =HeroAircraft.getHeroAircraft();
 
+
+
         enemyAircrafts = new LinkedList<>();
+
+
+
         heroBullets = new LinkedList<>();
         enemyBullets = new LinkedList<>();
         abstractProps = new LinkedList<>();
 
+        //使用策略方法获得shoot结果
+        //设定策略如下：
+        //定义策略使用者
+
+
+
+
+
         //对工厂进行初始化
+        bossEnemyFactory =new BossEnemyFactory();
         mobEnemyFactory = new MobEnemyFactory();
         eliteEnemyFactory =new EliteEnemyFactory();
         propBloodFactory =new PropBloodFactory();
         propBulletFactory =new PropBulletFactory();
         propBombFactory =new PropBombFactory();
+
+
+
+
 
         //Scheduled 线程池，用于定时任务调度
         executorService = new ScheduledThreadPoolExecutor(1);
@@ -88,6 +111,7 @@ public class Game extends JPanel {
      */
     public void action() {
 
+
         // 定时任务：绘制、对象产生、碰撞判定、击毁及结束判定
         Runnable task = () -> {
 
@@ -97,6 +121,10 @@ public class Game extends JPanel {
             if (timeCountAndNewCycleJudge()) {
                 System.out.println(time);
                 // 新敌机产生
+                if(score>bEdge* bTimes &&bossEnemySize(enemyAircrafts)<bossEnemyMaxNumber){
+                    enemyAircrafts.add((BossEnemy)bossEnemyFactory.produceFlyingObjectProduct());
+                    bTimes++;
+                }
                 if (enemyAircrafts.size() < enemyMaxNumber) {
                     //根据分数产生精英机
                     if(score%100==0&&score!=0&&eliteEnemySize(enemyAircrafts)<eliteEnemyMaxNumber){
@@ -166,6 +194,19 @@ public class Game extends JPanel {
                 continue;
             }
             if(aircraft instanceof EliteEnemy){
+                out+=1;
+            }
+        }
+        return out;
+    }
+    private int bossEnemySize(List<AbstractAircraft> abstractAircrafts){
+        assert abstractAircrafts!=null;
+        int out=0;
+        for(AbstractAircraft aircraft:abstractAircrafts){
+            if(aircraft.notValid()){
+                continue;
+            }
+            if(aircraft instanceof BossEnemy){
                 out+=1;
             }
         }
@@ -259,7 +300,7 @@ public class Game extends JPanel {
             }
         }
 
-        // Todo: 我方获得道具，道具生效
+        //  我方获得道具，道具生效
         for(AbstractProp abstractProp:abstractProps){
             if(heroAircraft.crash(abstractProp)&&abstractProp.crash(heroAircraft)){
                 //如果发生了撞击
@@ -296,7 +337,6 @@ public class Game extends JPanel {
         enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
         abstractProps.removeIf(AbstractFlyingObject::notValid);
 
-        //TODO 让道具消失
 
 
 
@@ -327,7 +367,7 @@ public class Game extends JPanel {
         }
 
         // 先绘制子弹，再绘制道具，后绘制飞机
-        //TODO 绘制道具
+        // 绘制道具
         paintImageWithPositionRevised(g,abstractProps);
 
         // 这样子弹显示在飞机的下层

@@ -15,6 +15,8 @@ import java.util.List;
 public class HeroAircraft extends AbstractAircraft {
 
     /** 攻击方式 */
+    private int ifon=0;         //用来记录当期子弹发射方式
+
     private int shootNum = 1;     //子弹一次发射数量
     private int power = 30;       //子弹伤害
     private int direction = -1;  //子弹射击方向 (向上发射：1，向下发射：-1)
@@ -64,4 +66,10 @@ public class HeroAircraft extends AbstractAircraft {
         return res;
     }
 
+    public int getIfon(){
+        return ifon;
+    }
+    public void setIfon(int ifon){
+        this.ifon=ifon;
+    }
 }

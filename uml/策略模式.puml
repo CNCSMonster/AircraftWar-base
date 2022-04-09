@@ -1,0 +1,50 @@
+@startuml
+
+
+'使用策略者
+class Context {
+    -Strategy strategy
+    +Context(Strategy strategy):Context
+    +setStrategy(Strategy strategy):void
+    +useShootStrategy:List<BasicBullet>
+    +useGetAircraftStrategy:AbstractAircraft
+}
+
+'策略接口
+interface Strategy {
+    +{abstract} strategyShoot():List<BasicBullet>
+    +{abstract} strategyGetAircraft:AbstractAircraft
+}
+
+'根据上下文使用策略者与策略接口之间的依赖关系
+Strategy <.. Context
+
+class BossStrategy {
+    +strategyShoot():List<BasicBullet>
+    +strategyGetAircraft():AbstractAircraft
+
+}
+
+class EliteStrategy {
+    +strategyShoot():List<BasicBullet>
+    +strategyGetAircraft():AbstractAircraft
+}
+
+class MobStrategy {
+    +strategyShoot():List<BasicBullet>
+    +strategyGetAircraft():AbstractAircraft
+}
+
+class HeroStrategy {
+    +strategyShoot():List<BasicBullet>
+    +strategyGetAircraft():AbstractAircraft
+}
+
+'实现策略接口的策略类与策略接口的实现关系
+Strategy <|.. HeroStrategy
+Strategy <|.. MobStrategy
+Strategy <|.. BossStrategy
+Strategy <|.. EliteStrategy
+
+
+@enduml
