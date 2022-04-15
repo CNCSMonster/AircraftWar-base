@@ -15,8 +15,15 @@ class Record {
     -int score
     -Date date
 
-    +
+    -getCurDate():Date
+    +Record(int score,String name):Record
 }
+
+'数据访问对象接口依赖于数据对象
+Record <.. RecordDAO
+
+'RecordEAOImpl实现了RecordDAO接口
+RecordDAO <|.. RecordDAOImpl
 
 
 

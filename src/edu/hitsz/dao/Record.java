@@ -20,8 +20,7 @@ public class Record {
         this.score = score;
     }
 
-
-    public static Date getCurDate(){
+    private static Date getCurDate(){
         Date out=new Date();
         return out;
     }
