@@ -25,6 +25,7 @@ public class RecordDAOImpl implements RecordDAO{
 
     @Override
     public List<Record> getAllRecords() {
+        //返回排好序的数据对象
         return list;
     }
 }
