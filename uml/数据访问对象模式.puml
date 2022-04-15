@@ -23,6 +23,7 @@ class Record {
     +setScore(int score):void
     +getName():String
     +setName(String name):void
+    +toString():String
 }
 
 '数据访问对象接口依赖于数据对象

@@ -1,9 +1,11 @@
 package edu.hitsz.dao;
 
 
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class Record {
+public class Record implements Serializable{
     private String name;
     private int score;
     private Date date;
@@ -49,4 +51,10 @@ public class Record {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString(){
+        return "玩家名称："+name+"  分数："+score+"  时间:"+date;
+    }
+
 }

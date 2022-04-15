@@ -3,6 +3,8 @@ package edu.hitsz.application;
 import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.BasicBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
+import edu.hitsz.dao.*;
+import edu.hitsz.dao.Record;
 import edu.hitsz.prop.AbstractProp;
 import edu.hitsz.prop.PropBlood;
 import edu.hitsz.prop.PropBomb;
@@ -13,6 +15,7 @@ import edu.hitsz.strategy.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.security.PrivateKey;
 import java.util.*;
 import java.util.List;
@@ -157,6 +160,29 @@ public class Game extends JPanel {
                 executorService.shutdown();
                 gameOverFlag = true;
                 System.out.println("Game Over!");
+                System.out.println("*******************");
+                System.out.println("游戏历史记录");
+                System.out.println("*******************");
+                RecordDAO data;
+                try {
+                    data=new RecordDAOImpl();
+                    List<Record> a;
+                    a = data.getAllRecords();
+                    int i=1;
+                    for(Record record:a){
+                        System.out.print("第"+i+"名");
+                        System.out.println(record);
+                        i++;
+                    }
+                    //添加新的记录。
+                    System.out.println("您的该次记录为：");
+                    Record add=new Record(score);
+                    System.out.println(add);
+                    data.doAdd(add);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
 
         };
