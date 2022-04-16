@@ -60,7 +60,7 @@ public class Game extends JPanel {
     private int eliteEnemyMaxNumber=1; //限制精英敌机的数量
     private int bossEnemyMaxNumber=1;   //限制boss机的数量
     private int bTimes=0;  //记录boss机出现的次数
-    private int bEdge=50;   //记录boss机出现的分数阈值
+    private int bEdge=200;   //记录boss机出现的分数阈值
 
     private boolean gameOverFlag = false;
     private int score = 0;
@@ -128,7 +128,7 @@ public class Game extends JPanel {
                     enemyAircrafts.add((BossEnemy)bossEnemyFactory.produceFlyingObjectProduct());
                     bTimes++;
                 }
-                if(score%100==0&&score!=0&&eliteEnemySize(enemyAircrafts)<eliteEnemyMaxNumber){
+                if(score%50==0&&score!=0&&eliteEnemySize(enemyAircrafts)<eliteEnemyMaxNumber){
                     enemyAircrafts.add((EliteEnemy)eliteEnemyFactory.produceFlyingObjectProduct());
                 }
                 if (enemyAircrafts.size() < enemyMaxNumber) {
@@ -144,6 +144,9 @@ public class Game extends JPanel {
 
             // 飞机移动
             aircraftsMoveAction();
+
+            //道具移动
+            propMoveAction();
 
             // 撞击检测
             crashCheckAction();
@@ -163,12 +166,11 @@ public class Game extends JPanel {
                 System.out.println("*******************");
                 System.out.println("游戏历史记录");
                 System.out.println("*******************");
-                RecordDAO data;
                 try {
-                    data=new RecordDAOImpl();
-                    List<Record> a;
-                    a = data.getAllRecords();
+                    RecordDAO data=new RecordDAOImpl();
+                    List<Record> a= data.getAllRecords();
                     int i=1;
+                    System.out.println("历史记录数量为"+a.size());
                     for(Record record:a){
                         System.out.print("第"+i+"名");
                         System.out.println(record);
@@ -193,6 +195,12 @@ public class Game extends JPanel {
          */
         executorService.scheduleWithFixedDelay(task, timeInterval, timeInterval, TimeUnit.MILLISECONDS);
 
+    }
+
+    private void propMoveAction() {
+        for(AbstractProp abstractProp:abstractProps){
+            abstractProp.forward();
+        }
     }
 
     //***********************
@@ -261,11 +269,7 @@ public class Game extends JPanel {
 
     private void aircraftsMoveAction() {
         for (AbstractAircraft enemyAircraft : enemyAircrafts) {
-            if(enemyAircraft instanceof EliteEnemy){
-                enemyAircraft.forward();
-            }else{
-                enemyAircraft.forward();
-            }
+            enemyAircraft.forward();
         }
     }
 
@@ -336,12 +340,12 @@ public class Game extends JPanel {
 
     //获得道具补给
     private void getProps(){
-        int rand=(int)(Math.random()*15);
-        if(rand<2){
+        int rand=(int)(Math.random()*14);
+        if(rand<3){
             abstractProps.add((PropBlood)propBloodFactory.produceFlyingObjectProduct());
-        }else if(rand<5){
+        }else if(rand<4){
             abstractProps.add((PropBomb)propBombFactory.produceFlyingObjectProduct());
-        }else if(rand<8){
+        }else if(rand<13){
             abstractProps.add((PropBullet)propBulletFactory.produceFlyingObjectProduct());
         }
     }
