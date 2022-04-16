@@ -58,7 +58,7 @@ AbstractFlyingObject <|-- AbstractProp
 AbstractAircraft <|-- HeroAircraft
 AbstractAircraft <|-- MobEnemy
 AbstractAircraft <|-- EliteEnemy
-'AbstractAircraft <|-- BossEnemy
+AbstractAircraft <|-- BossEnemy
 
 BaseBullet <|-- HeroBullet
 BaseBullet <|-- EnemyBullet

@@ -32,7 +32,7 @@ public class HeroAircraft extends AbstractAircraft {
     private HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
         this.power=30;
-        this.numOfBullet=5;
+        this.numOfBullet=1;
 //        this.setShootStrategy(new ScatterShootStrategy());
         this.setShootStrategy(new StraightShootStrategy());
     }

@@ -26,11 +26,29 @@ public class BossEnemy extends AbstractAircraft{
 
     @Override
     public void forward() {
-        this.locationY+=speedY;
-        // 判定 y 轴向下飞行出界
-        if (locationY >= Main.WINDOW_HEIGHT ) {
-            vanish();
+        //Boss机的飞行,只能够缓慢左右移动
+
+        //1/50机会瞬移，其他情况不动
+        int r=(int)(Math.random()*100);
+        if(r==1){
+            //随机往左或者右瞬移
+            //得到1或者-1
+            int lOrR=2*(int)(Math.random()*2)-1;
+            //瞬移距离为1/3窗口左右
+            int dis=Main.WINDOW_WIDTH/3;
+            if(locationX+dis*lOrR<0||locationX+dis*lOrR>Main.WINDOW_WIDTH){
+                ;
+            }else{
+                locationX+=lOrR*dis;
+            }
         }
+
+
+
+
+        //Boss机不能出界
+
+
     }
 //
 //    @Override
