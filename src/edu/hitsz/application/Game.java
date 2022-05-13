@@ -36,6 +36,26 @@ public class Game extends JPanel {
      */
     private final ScheduledExecutorService executorService;
 
+    //难度设置,不同难度对应不同背景//初始为0难度，共分5种难度
+    private static int levelOfGame=0;
+
+    public static void setLevel(int levelOfGame){
+        Game.levelOfGame=levelOfGame;
+    }
+    //获得当前难度
+    public static String getLevel(){
+        switch(Game.levelOfGame){
+            case 0:
+                return "简单";
+            case 1:
+                return "中等";
+            case 2:
+                return "困难";
+            default:
+                return "其他";
+        }
+    }
+
     /**
      * 时间间隔(ms)，控制刷新频率
      */
@@ -102,7 +122,7 @@ public class Game extends JPanel {
 
 
         //Scheduled 线程池，用于定时任务调度
-        executorService = new ScheduledThreadPoolExecutor(1);
+        executorService = new ScheduledThreadPoolExecutor(5);
 
         //启动英雄机鼠标监听
         new HeroController(this, heroAircraft);
@@ -113,7 +133,10 @@ public class Game extends JPanel {
      * 游戏启动入口，执行游戏逻辑
      */
     public void action() {
-
+        //是否加入背景音乐
+        if(MusicChoose.getIfUseBgm()){
+            executorService.execute(MusicRunnable.BGM_SOUND);
+        }
 
         // 定时任务：绘制、对象产生、碰撞判定、击毁及结束判定
         Runnable task = () -> {
@@ -125,6 +148,8 @@ public class Game extends JPanel {
                 System.out.println(time);
                 // 新敌机产生
                 if(score>bEdge* bTimes &&bossEnemySize(enemyAircrafts)<bossEnemyMaxNumber){
+                    executorService.execute(MusicRunnable.BGM_BOSS_SOUND);
+
                     enemyAircrafts.add((BossEnemy)bossEnemyFactory.produceFlyingObjectProduct());
                     bTimes++;
                 }
@@ -160,6 +185,9 @@ public class Game extends JPanel {
             // 游戏结束检查
             if (heroAircraft.getHp() <= 0) {
                 // 游戏结束
+                //新开启一个线程播放结束音乐
+                Thread gameover=new Thread(MusicRunnable.GAME_OVER_SOUND);
+                gameover.start();
                 executorService.shutdown();
                 gameOverFlag = true;
                 System.out.println("Game Over!");
@@ -305,6 +333,8 @@ public class Game extends JPanel {
                     continue;
                 }
                 if (enemyAircraft.crash(bullet)) {
+                    executorService.execute(MusicRunnable.BULLET_HIT_SOUND);
+
                     // 敌机撞击到英雄机子弹
                     // 敌机损失一定生命值
                     enemyAircraft.decreaseHp(bullet.getPower());
@@ -334,6 +364,7 @@ public class Game extends JPanel {
             if(heroAircraft.crash(abstractProp)&&abstractProp.crash(heroAircraft)){
                 //如果发生了撞击
                 abstractProp.propDo(heroAircraft,enemyAircrafts);
+                executorService.execute(MusicRunnable.GET_SUPPLY_SOUND);
             }
         }
     }
@@ -387,9 +418,17 @@ public class Game extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
+        //TODO 根据难度选择背景图片
+
+
         // 绘制背景,图片滚动
         g.drawImage(ImageManager.BACKGROUND_IMAGE, 0, this.backGroundTop - Main.WINDOW_HEIGHT, null);
         g.drawImage(ImageManager.BACKGROUND_IMAGE, 0, this.backGroundTop, null);
+
+
+
+
+
         this.backGroundTop += 1;
         if (this.backGroundTop == Main.WINDOW_HEIGHT) {
             this.backGroundTop = 0;
