@@ -35,6 +35,9 @@ public class HeroController {
         };
         game.addMouseListener(mouseAdapter);
         game.addMouseMotionListener(mouseAdapter);
+
+
+
     }
 
 

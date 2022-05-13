@@ -7,4 +7,5 @@ import java.util.List;
 public interface RecordDAO {
     public abstract List<Record> getAllRecords() throws IOException;
     public abstract void doAdd(Record record) throws IOException;
+    public abstract void doDelete(Record record) throws IOException;
 }

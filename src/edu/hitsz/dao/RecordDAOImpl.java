@@ -83,6 +83,20 @@ public class RecordDAOImpl implements RecordDAO{
         fops.close();
     }
 
+    @Override
+    public void doDelete(Record record) throws IOException{
+        list.remove(record);
+        //把list写入文件
+        File file=new File(recordPath);
+        FileOutputStream fops=new FileOutputStream(file);
+        ObjectOutputStream oops=new ObjectOutputStream(fops);
+        List<Record> cur=getAllRecords();
+        for(Record recorda:cur) {
+            oops.writeObject(recorda);
+        }
+        oops.close();
+        fops.close();
+    }
 
     @Override
     public List<Record> getAllRecords() throws IOException {

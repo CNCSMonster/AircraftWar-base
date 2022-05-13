@@ -37,6 +37,12 @@ public class HeroAircraft extends AbstractAircraft {
         this.setShootStrategy(new StraightShootStrategy());
     }
 
+    public void heroInit(){
+        this.locationX=Main.WINDOW_WIDTH / 2;
+        this.locationY=Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight();
+        this.hp=10000;
+    }
+
 
     public static HeroAircraft getHeroAircraft(){
         return heroAircraft;
@@ -47,26 +53,7 @@ public class HeroAircraft extends AbstractAircraft {
         // 英雄机由鼠标控制，不通过forward函数移动
     }
 
-//    @Override
-//    /**
-//     * 通过射击产生子弹
-//     * @return 射击出的子弹List
-//     */
-//    public List<BasicBullet> shoot() {
-//        List<BasicBullet> res = new LinkedList<>();
-//        int x = this.getLocationX();
-//        int y = this.getLocationY() + direction*2;
-//        int speedX = 0;
-//        int speedY = this.getSpeedY() + direction*5;
-//        BasicBullet basicBullet;
-//        for(int i=0; i<shootNum; i++){
-//            // 子弹发射位置相对飞机位置向前偏移
-//            // 多个子弹横向分散
-//            basicBullet = new HeroBullet(x + (i*2 - shootNum + 1)*10, y, speedX, speedY, power);
-//            res.add(basicBullet);
-//        }
-//        return res;
-//    }
+
 
 
 }
