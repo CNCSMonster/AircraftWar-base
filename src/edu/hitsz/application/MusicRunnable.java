@@ -19,8 +19,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  */
 public class MusicRunnable implements Runnable {
 
-
-
     //音频文件名
     private String filename;
 
@@ -56,9 +54,6 @@ public class MusicRunnable implements Runnable {
     public static MusicRunnable BULLET_HIT_SOUND=new MusicRunnable("src/sounds/bullet_hit.wav");
     public static MusicRunnable GAME_OVER_SOUND=new MusicRunnable("src/sounds/game_over.wav");
     public static MusicRunnable GET_SUPPLY_SOUND=new MusicRunnable("src/sounds/get_supply.wav");
-
-
-
 
 
     private MusicRunnable(String filename) {

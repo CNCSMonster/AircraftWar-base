@@ -12,6 +12,9 @@ public class PropBullet extends AbstractProp{
         super(x, y);
     }
 
+    //道具类作用对象是否是一样的
+
+
     @Override
     public void propDo(HeroAircraft heroAircraft, List<AbstractAircraft> enemy) {
         int a;
@@ -31,6 +34,20 @@ public class PropBullet extends AbstractProp{
             default:
                 break;
         }
+        //开启一个线程计时结束英雄机子弹增加效果。
+        Runnable runnable=()->{
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            heroAircraft.setShootStrategy(new StraightShootStrategy());
+            heroAircraft.setNumOfBullet(1);
+
+        };
+        new Thread(runnable).start();
+
+
     }
 
 

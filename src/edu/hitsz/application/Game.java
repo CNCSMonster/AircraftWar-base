@@ -36,6 +36,7 @@ public class Game extends JPanel {
      */
     private final ScheduledExecutorService executorService;
 
+    private final ExecutorService musicExecutorService;
 
 
     //难度设置,不同难度对应不同背景//初始为0难度，共分5种难度
@@ -65,6 +66,7 @@ public class Game extends JPanel {
      * 时间间隔(ms)，控制刷新频率
      */
     private int timeInterval = 40;
+
 
     private final HeroAircraft heroAircraft;
     private final List<AbstractAircraft> enemyAircrafts;
@@ -122,8 +124,11 @@ public class Game extends JPanel {
         propBulletFactory =new PropBulletFactory();
         propBombFactory =new PropBombFactory();
 
-        //Scheduled 线程池，用于定时任务调度
-        executorService = new ScheduledThreadPoolExecutor(5);
+        //Scheduled 线程池，用于定时任务
+        executorService = new ScheduledThreadPoolExecutor(1);
+
+        //线程池，用于音乐
+        musicExecutorService=new ThreadPoolExecutor(5,10,60L,TimeUnit.SECONDS,new SynchronousQueue<Runnable>());
 
         //启动英雄机鼠标监听
         new HeroController(this, heroAircraft);
@@ -159,7 +164,7 @@ public class Game extends JPanel {
         if(MusicChoose.getIfUseBgm()){
             MusicRunnable.BGM_SOUND.setIfCycle(true);
             MusicRunnable.BGM_SOUND.setIfBreak(false);
-            executorService.execute(MusicRunnable.BGM_SOUND);
+            musicExecutorService.execute(MusicRunnable.BGM_SOUND);
         }
 
         // 定时任务：绘制、对象产生、碰撞判定、击毁及结束判定
@@ -177,7 +182,7 @@ public class Game extends JPanel {
                     //加入Boss音乐
                     MusicRunnable.BGM_BOSS_SOUND.setIfCycle(true);
                     MusicRunnable.BGM_BOSS_SOUND.setIfBreak(false);
-                    executorService.execute(MusicRunnable.BGM_BOSS_SOUND);
+                    musicExecutorService.execute(MusicRunnable.BGM_BOSS_SOUND);
 
                     enemyAircrafts.add((BossEnemy)bossEnemyFactory.produceFlyingObjectProduct());
                     bTimes++;
@@ -223,30 +228,13 @@ public class Game extends JPanel {
                 MusicRunnable.BGM_BOSS_SOUND.setIfBreak(true);
 
                 //新开启一个线程播放结束音乐
-                Thread gameover=new Thread(MusicRunnable.GAME_OVER_SOUND);
-                gameover.start();
+                musicExecutorService.execute(MusicRunnable.GAME_OVER_SOUND);
                 executorService.shutdown();
 
                 gameOverFlag = true;
-                System.out.println("Game Over!");
-                System.out.println("*******************");
-                System.out.println("游戏历史记录");
-                System.out.println("*******************");
+
                 try {
-                    RecordDAO data=new RecordDAOImpl();
-                    List<Record> a= data.getAllRecords();
-                    int i=1;
-                    System.out.println("历史记录数量为"+a.size());
-                    for(Record record:a){
-                        System.out.print("第"+i+"名");
-                        System.out.println(record);
-                        i++;
-                    }
-                    //添加新的记录。
-                    System.out.println("您的该次记录为：");
-                    Record add=new Record(score);
-                    System.out.println(add);
-                    data.doAdd(add);
+                    new RecordDialog(score);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -261,6 +249,26 @@ public class Game extends JPanel {
          */
         executorService.scheduleWithFixedDelay(task, timeInterval, timeInterval, TimeUnit.MILLISECONDS);
     }
+
+    //游戏中途结束
+    public void endGame(){
+        //结束两个线程
+        //如果两个线程没有结束的话
+        if(!executorService.isTerminated()){
+            executorService.shutdown();
+        }
+        if(!musicExecutorService.isTerminated()){
+            musicExecutorService.shutdown();
+        }
+        //关闭可能的Boss音乐和背景音乐
+        MusicRunnable.BGM_BOSS_SOUND.setIfBreak(true);
+        MusicRunnable.BGM_BOSS_SOUND.setIfCycle(false);
+        MusicRunnable.BGM_SOUND.setIfCycle(false);
+        MusicRunnable.BGM_SOUND.setIfBreak(true);
+
+    }
+
+
 
     private void propMoveAction() {
         for(AbstractProp abstractProp:abstractProps){
@@ -405,7 +413,7 @@ public class Game extends JPanel {
             if(heroAircraft.crash(abstractProp)&&abstractProp.crash(heroAircraft)){
                 //如果发生了撞击
                 abstractProp.propDo(heroAircraft,enemyAircrafts);
-                executorService.execute(MusicRunnable.GET_SUPPLY_SOUND);
+                musicExecutorService.execute(MusicRunnable.GET_SUPPLY_SOUND);
             }
         }
     }
@@ -462,7 +470,6 @@ public class Game extends JPanel {
         // 绘制背景,图片滚动
         g.drawImage(bgimage, 0, this.backGroundTop - Main.WINDOW_HEIGHT, null);
         g.drawImage(bgimage, 0, this.backGroundTop, null);
-
 
 
         this.backGroundTop += 1;

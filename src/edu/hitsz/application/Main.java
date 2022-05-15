@@ -17,11 +17,9 @@ import static edu.hitsz.application.Main.WINDOW_WIDTH;
 class MusicChoose extends  JDialog{
     //是否开启背景音乐
     private static boolean ifUseBgm=true;
-
     public  static boolean getIfUseBgm(){
         return ifUseBgm;
     }
-
     //音效
     public MusicChoose(){
         setTitle("音效选择界面");
@@ -130,12 +128,13 @@ class LevelChoose extends JDialog{
 }
 //开始游戏界面
 class StartGame extends JDialog{
+    private Game game;
     public void startGame(){
         //开始游戏
-        setVisible(true);
-        Game game=new Game();
+        game=new Game();
         getContentPane().add(game);
         game.action();
+        setVisible(true);
     }
     public StartGame(){
         // 获得屏幕的分辨率，初始化 Frame
@@ -146,6 +145,17 @@ class StartGame extends JDialog{
         setBounds(((int) screenSize.getWidth() - WINDOW_WIDTH) / 2, 0,
                 WINDOW_WIDTH, WINDOW_HEIGHT);
         setVisible(false);
+        //设置界面关闭事件
+        //界面关闭后里面的游戏要结束
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                if(game!=null){
+                    game.endGame();
+                }
+            }
+        });
     }
 }
 
