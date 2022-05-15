@@ -2,6 +2,8 @@ package edu.hitsz.bullet;
 
 import edu.hitsz.application.Main;
 import edu.hitsz.basic.AbstractFlyingObject;
+import edu.hitsz.prop.AbstractProp;
+
 
 /**
  * 子弹类。
@@ -9,7 +11,7 @@ import edu.hitsz.basic.AbstractFlyingObject;
  *
  * @author hitsz
  */
-public class BasicBullet extends AbstractFlyingObject {
+public class BasicBullet extends AbstractFlyingObject{
 
     private int power = 10;
 
@@ -40,5 +42,10 @@ public class BasicBullet extends AbstractFlyingObject {
 
     public int getPower() {
         return power;
+    }
+
+    //使用观察者模式的观察方法,获得道具的影响
+    public void getEffected(AbstractProp abstractProp){
+        this.vanish();
     }
 }

@@ -1,0 +1,39 @@
+@startuml
+
+
+
+Abstract class AbstractProp{
+    #static heroAircraft:HeroAircraft
+    #static enemyAircrafts:List<AbstractAircraft>
+    #static heroBullets:List<BasicBullet>
+    #static enemyBullets:List<BasicBullet>
+
+    +{abstract} propDo():void
+    +setHeroAircraft(HeList<BasicBullet>roAircraft heroAircraft):void
+    +setEnemyAircrafts(List<AbstractAircraft> enemyAircrafts):void
+    +setEnemyBullets(List<BasicBullet> enemyBullets):void
+    +setHeroBullets(List<BasicBullet> enemyBullets)):void
+}
+
+Abstract class PropSubsriber{
+    +{abstract} getEffected(AbstractProp abstractProp):void
+}
+
+PropSubsriber..>AbstractProp
+
+Abstract class AbstractAircraft{
+    +{abstract} getEffected(AbstractProp abstractProp):void
+}
+
+Abstract class BasicBullet{
+    +{abstract} getEffected(AbstractProp abstractProp):void
+}
+
+'两个接口之间的依赖关系
+AbstractAircraft..|>PropSubsriber
+BasicBullet..|>PropSubsriber
+
+
+
+
+@enduml

@@ -2,6 +2,7 @@ package edu.hitsz.prop;
 
 import edu.hitsz.aircraft.AbstractAircraft;
 import edu.hitsz.aircraft.HeroAircraft;
+import edu.hitsz.bullet.BasicBullet;
 
 import java.util.List;
 
@@ -11,18 +12,20 @@ public class PropBomb extends AbstractProp{
         super(x, y);
     }
 
+
+
+
     @Override
-    public void propDo(HeroAircraft heroAircraft, List<AbstractAircraft> enemy) {
-        //清除所有飞机
-        for(AbstractAircraft aircraft:enemy){
-            if(!aircraft.notValid()){
-                aircraft.vanish();
-            }
+    public void propDo(){
+        for(AbstractAircraft abstractAircraft:enemyAircrafts){
+            abstractAircraft.getEffected(this);
         }
-        System.out.println("BombSupply active!");
+        for(BasicBullet basicBullet:enemyBullets){
+            basicBullet.getEffected(this);
+        }
+        for(BasicBullet basicBullet:heroBullets){
+            basicBullet.getEffected(this);
+        }
 
     }
-
-
-
 }

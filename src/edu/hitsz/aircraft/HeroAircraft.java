@@ -4,6 +4,8 @@ import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BasicBullet;
 import edu.hitsz.bullet.HeroBullet;
+import edu.hitsz.prop.AbstractProp;
+import edu.hitsz.prop.PropBlood;
 import edu.hitsz.strategy.ScatterShootStrategy;
 import edu.hitsz.strategy.StraightShootStrategy;
 
@@ -43,7 +45,6 @@ public class HeroAircraft extends AbstractAircraft {
         this.hp=10000;
     }
 
-
     public static HeroAircraft getHeroAircraft(){
         return heroAircraft;
     }
@@ -54,6 +55,44 @@ public class HeroAircraft extends AbstractAircraft {
     }
 
 
+    //使用观察者模式的观察方法,获得道具的影响
+    @Override
+    public void getEffected(AbstractProp abstractProp){
+        //射击策略或者子弹数量改变
+        if(abstractProp instanceof PropBlood){
+            decreaseHp(-5000);
+        }else{
+            int a;
+            a=(int)(Math.random()*3)+1;
+            switch (a){
+                case 1: //威力增加
+                    setPower(100);
+                    break;
+                case 2: //数量增加,并且直射
+                    setNumOfBullet(5);
+                    setShootStrategy(new StraightShootStrategy());
+                    break;
+                case 3: //改变射击方式
+                    setNumOfBullet(5);
+                    setShootStrategy(new ScatterShootStrategy());
+                    break;
+                default:
+                    break;
+            }
+            //开启一个线程计时结束英雄机子弹增加效果。
+            Runnable runnable=()->{
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                setShootStrategy(new StraightShootStrategy());
+                setNumOfBullet(1);
+
+            };
+            new Thread(runnable).start();
+        }
+    }
 
 
 }

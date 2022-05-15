@@ -2,6 +2,7 @@ package edu.hitsz.aircraft;
 
 import edu.hitsz.bullet.BasicBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
+import edu.hitsz.prop.AbstractProp;
 import edu.hitsz.strategy.Strategy;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author hitsz
  */
-public abstract class AbstractAircraft extends AbstractFlyingObject {
+public abstract class AbstractAircraft extends AbstractFlyingObject{
     /**
      * 生命值
      */
@@ -102,6 +103,8 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
         }
     }
 
+    //使用观察者模式的观察方法,获得道具的影响
+    public abstract void getEffected(AbstractProp abstractProp);
 }
 
 

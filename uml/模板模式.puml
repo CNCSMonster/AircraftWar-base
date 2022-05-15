@@ -1,0 +1,34 @@
+@startuml
+
+class StartGame{
+    +startGame():void
+}
+
+abstract class Game{
+    +{abstract} action():void
+    '省略其他参数和方法的定义
+}
+
+class NormalGame{
+    +action():void
+}
+
+class EasyGame{
+    +action():void
+}
+
+class HardGame{
+    +action():void
+}
+
+StartGame..>Game
+
+HardGame..|>Game
+NormalGame..|>Game
+EasyGame..|>Game
+
+
+
+
+
+@enduml

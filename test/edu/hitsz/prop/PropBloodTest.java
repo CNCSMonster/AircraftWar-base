@@ -17,12 +17,4 @@ class PropBloodTest {
         System.out.println(propBlood.notValid());
     }
 
-    @Test
-    void propDo() {
-        HeroAircraft heroAircraft=HeroAircraft.getHeroAircraft();
-        PropBlood propBlood=new PropBlood(heroAircraft.getLocationX(),heroAircraft.getLocationY());
-        System.out.println(heroAircraft.getHp());
-        propBlood.propDo(heroAircraft,null);
-        System.out.println(heroAircraft.getHp());
-    }
 }

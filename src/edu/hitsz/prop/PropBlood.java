@@ -19,18 +19,16 @@ public class PropBlood extends AbstractProp{
         super(x, y);
     }
 
+
+
+    //通知方法
     @Override
-    public void propDo(HeroAircraft heroAircraft, List<AbstractAircraft> enemy) {
-        //道具做事
-        heroAircraft.decreaseHp(-5000);
+    public void propDo(){
+        heroAircraft.getEffected(this);
     }
 
 
 
-
-
-
-    //重载父类的操作道具方法
 
 
 

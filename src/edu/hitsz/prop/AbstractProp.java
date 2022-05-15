@@ -5,10 +5,37 @@ import edu.hitsz.aircraft.AbstractAircraft;
 import edu.hitsz.aircraft.HeroAircraft;
 import edu.hitsz.application.Main;
 import edu.hitsz.basic.AbstractFlyingObject;
-
+import edu.hitsz.bullet.BasicBullet;
+import edu.hitsz.bullet.EnemyBullet;
+import java.net.PortUnreachableException;
 import java.util.List;
 
-public abstract class AbstractProp extends AbstractFlyingObject {
+public abstract class AbstractProp extends AbstractFlyingObject{
+
+    protected static  HeroAircraft heroAircraft;
+    protected static List<AbstractAircraft> enemyAircrafts;
+    protected static List<BasicBullet> heroBullets;
+    protected static List<BasicBullet> enemyBullets;
+
+
+    //使用观察者模式的方法
+
+    public static void setHeroAircraft(HeroAircraft heroAircraft){
+        AbstractProp.heroAircraft=heroAircraft;
+    }
+    public static void setEnemyAircrafts(List<AbstractAircraft> enemyAircrafts){
+        AbstractProp.enemyAircrafts=enemyAircrafts;
+    }
+    public static void setHeroBullets(List<BasicBullet> basicBullets){
+        AbstractProp.heroBullets=heroBullets;
+    }
+    public static void setEnemyBullets(List<BasicBullet> enemyBullets){
+        AbstractProp.enemyBullets=enemyBullets;
+    }
+
+    //通知方法
+    public abstract void propDo();
+
 
 
     // 重载生成道具类型的方法
@@ -16,8 +43,6 @@ public abstract class AbstractProp extends AbstractFlyingObject {
         super(x,y,0,0);
         this.speedY=2;
     }
-
-
 
     // 重载crash方法，专门用来实现道具与英雄机的碰撞
     public boolean crash(HeroAircraft heroAircraft){
@@ -39,7 +64,6 @@ public abstract class AbstractProp extends AbstractFlyingObject {
         }
     }
 
-    public abstract void propDo(HeroAircraft heroAircraft, List<AbstractAircraft> enemy);//定义一个抽象方法实现道具的效果
 
     // 实现抽象父类中的移动方法
     @Override
@@ -50,5 +74,8 @@ public abstract class AbstractProp extends AbstractFlyingObject {
             this.vanish();
         }
     }
+
+
+
 
 }

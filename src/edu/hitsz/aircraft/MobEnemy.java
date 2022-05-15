@@ -3,6 +3,7 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BasicBullet;
 import edu.hitsz.bullet.EnemyBullet;
+import edu.hitsz.prop.AbstractProp;
 import edu.hitsz.strategy.StraightShootStrategy;
 
 import java.util.LinkedList;
@@ -32,21 +33,10 @@ public class MobEnemy extends AbstractAircraft {
         }
     }
 
-//    @Override
-//    public List<BasicBullet> shoot() {
-//        List<BasicBullet> res = new LinkedList<>();
-//        int x = this.getLocationX();
-//        int y = this.getLocationY() + direction*2;
-//        int speedX = 0;
-//        int speedY = this.getSpeedY() + direction*5;
-//        BasicBullet basicBullet;
-//        for(int i=0; i<shootNum; i++){
-//            // 子弹发射位置相对飞机位置向前偏移
-//            // 多个子弹横向分散
-//            basicBullet = new EnemyBullet(x + (i*2 - shootNum + 1)*10, y, speedX, speedY, power);
-//            res.add(basicBullet);
-//        }
-//        return res;
-//    }
+    //使用观察者模式的观察方法,获得道具的影响
+    @Override
+    public void getEffected(AbstractProp abstractProp){
+        this.vanish();
+    }
 
 }

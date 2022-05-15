@@ -17,11 +17,9 @@ import static edu.hitsz.application.Main.WINDOW_WIDTH;
 class MusicChoose extends  JDialog{
     //是否开启背景音乐
     private static boolean ifUseBgm=true;
-
     public  static boolean getIfUseBgm(){
         return ifUseBgm;
     }
-
     //音效
     public MusicChoose(){
         setTitle("音效选择界面");
@@ -74,6 +72,30 @@ class MusicChoose extends  JDialog{
 //难度选择界面
 class LevelChoose extends JDialog{
 
+    private  static int levelOfGame=0;
+
+    public static int getLevelOfGame(){
+        return levelOfGame;
+    }
+
+    private static void setLevelOfGame(int levelOfGame){
+        LevelChoose.levelOfGame=levelOfGame;
+    }
+
+    public static String StringOfGameLevel(){
+        switch(levelOfGame){
+            case 0:
+                return "简单";
+            case 1:
+                return "中等";
+            case 2:
+                return "困难";
+            default:
+                return "其他";
+        }
+    }
+
+
     public LevelChoose(){
         // 获得屏幕的分辨率，初始化 Frame
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -89,7 +111,7 @@ class LevelChoose extends JDialog{
         Container container=getContentPane();
 
 
-        JLabel jLabel=new JLabel("当前难度："+Game.getLevel());
+        JLabel jLabel=new JLabel("当前难度："+StringOfGameLevel());
         jLabel.setBounds(150,50,200,40);
         container.add(jLabel);
 
@@ -107,22 +129,22 @@ class LevelChoose extends JDialog{
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game.setLevel(0);
-                jLabel.setText("当前难度:"+Game.getLevel());
+                setLevelOfGame(0);
+                jLabel.setText("当前难度:"+StringOfGameLevel());
             }
         });
         jButton1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game.setLevel(1);
-                jLabel.setText("当前难度:"+Game.getLevel());
+                setLevelOfGame(1);
+                jLabel.setText("当前难度:"+StringOfGameLevel());
             }
         });
         jButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game.setLevel(2);
-                jLabel.setText("当前难度:"+Game.getLevel());
+                setLevelOfGame(2);
+                jLabel.setText("当前难度:"+StringOfGameLevel());
             }
         });
         setVisible(false);
@@ -130,12 +152,25 @@ class LevelChoose extends JDialog{
 }
 //开始游戏界面
 class StartGame extends JDialog{
+    private Game game;
     public void startGame(){
         //开始游戏
-        setVisible(true);
-        Game game=new Game();
+        switch (LevelChoose.getLevelOfGame()){
+            case 0:
+                game=new EasyGame();
+                break;
+            case 1:
+                game=new NormalGame();
+                break;
+            case 2:
+                game=new HardGame();
+                break;
+            default:
+                break;
+        }
         getContentPane().add(game);
         game.action();
+        setVisible(true);
     }
     public StartGame(){
         // 获得屏幕的分辨率，初始化 Frame
@@ -146,6 +181,17 @@ class StartGame extends JDialog{
         setBounds(((int) screenSize.getWidth() - WINDOW_WIDTH) / 2, 0,
                 WINDOW_WIDTH, WINDOW_HEIGHT);
         setVisible(false);
+        //设置界面关闭事件
+        //界面关闭后里面的游戏要结束
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                if(game!=null){
+                    game.endGame();
+                }
+            }
+        });
     }
 }
 
@@ -153,6 +199,9 @@ class StartGame extends JDialog{
 
 class Menu extends JFrame{
     public Menu(String name){
+        Point point=getLocation();
+        Dimension size=getSize();
+
         setVisible(true);
         // 获得屏幕的分辨率，初始化 Frame
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -217,7 +266,10 @@ public class Main {
     public static final int WINDOW_HEIGHT = 768;
 
     public static void main(String[] args) {
-        new Menu("Aircraft War Menu");
+        SwingUtilities.invokeLater(()->{
+            new Menu("Aircraft War Menu");
+
+        });
 
     }
 }
